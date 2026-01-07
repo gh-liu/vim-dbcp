@@ -1,0 +1,45 @@
+*dbcp.txt*  Database Completion Provider
+
+Author:  liu
+License: MIT
+
+INTRODUCTION                                    *dbcp*
+
+vim-dbcp provides completion for database queries. Works with vim-dadbod.
+
+REQUIREMENTS                                    *dbcp-requirements*
+
+- Vim 8.0+ or Neovim 0.5+
+- vim-dadbod (https://github.com/tpope/vim-dadbod)
+
+USAGE                                           *dbcp-usage*
+
+Set the completion function:
+>
+    setlocal completefunc=dbcp#complete
+<
+Trigger with |i_CTRL-X_CTRL-U|.
+
+FUNCTION                                        *dbcp-function*
+
+                                                *dbcp#complete()*
+dbcp#complete({findstart}, {base})
+                        Main completion function. Use with 'completefunc'.
+                        Reads database URL from b:db or g:db.
+
+ADAPTERS                                        *dbcp-adapters*
+
+Adapters are located in:
+>
+    autoload/dbcp/adapter/{db_type}.vim
+<
+Currently supported: mongodb
+
+WRITING ADAPTERS                                *dbcp-adapter-api*
+
+Create `autoload/dbcp/adapter/{db_type}.vim` with:
+>
+    dbcp#adapter#{db_type}#complete(findstart, base, db_url)
+<
+
+ vim:tw=78:ts=8:ft=help:norl:

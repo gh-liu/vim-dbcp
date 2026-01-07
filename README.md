@@ -20,3 +20,28 @@ Completion framework for database queries, works with [vim-dadbod](https://githu
 { "gh-liu/vim-dbcp", dependencies = { "tpope/vim-dadbod" } }
 ```
 
+## Usage
+
+```vim
+" Set completion function
+setlocal completefunc=dbcp#complete
+
+" Trigger with <C-x><C-u>
+```
+
+## Writing an Adapter
+
+Create `autoload/dbcp/adapter/{db_type}.vim`:
+
+```vim
+function! dbcp#adapter#{db_type}#complete(findstart, base, db_url) abort
+  if a:findstart
+    " Return start column
+  endif
+  " Return completion items
+endfunction
+```
+
+## License
+
+MIT
