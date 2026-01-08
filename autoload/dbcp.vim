@@ -30,3 +30,9 @@ function! dbcp#complete(findstart, base) abort
     return a:findstart ? -1 : []
   endtry
 endfunction
+
+" Omnifunc wrapper - use with: setlocal omnifunc=dbcp#omnifunc
+" Trigger with <C-x><C-o>
+function! dbcp#omnifunc(findstart, base) abort
+  return dbcp#complete(a:findstart, a:base)
+endfunction

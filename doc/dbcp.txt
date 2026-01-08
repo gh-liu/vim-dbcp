@@ -7,10 +7,15 @@ INTRODUCTION                                    *dbcp*
 
 vim-dbcp provides completion for database queries. Works with vim-dadbod.
 
+Supports SQL databases (PostgreSQL, MySQL, SQLite, SQL Server, Oracle) and
+NoSQL databases (MongoDB).
+
 REQUIREMENTS                                    *dbcp-requirements*
 
 - Vim 8.0+ or Neovim 0.5+
 - vim-dadbod (https://github.com/tpope/vim-dadbod)
+
+Note: SQLite column completion requires SQLite 3.37.0+ for best results.
 
 USAGE                                           *dbcp-usage*
 
@@ -20,12 +25,70 @@ Set the completion function:
 <
 Trigger with |i_CTRL-X_CTRL-U|.
 
-FUNCTION                                        *dbcp-function*
+Or use omnifunc:
+>
+    setlocal omnifunc=dbcp#omnifunc
+<
+Trigger with |i_CTRL-X_CTRL-O|.
+
+FUNCTIONS                                       *dbcp-functions*
 
                                                 *dbcp#complete()*
 dbcp#complete({findstart}, {base})
                         Main completion function. Use with 'completefunc'.
                         Reads database URL from b:db or g:db.
+
+                                                *dbcp#omnifunc()*
+dbcp#omnifunc({findstart}, {base})
+                        Omnifunc wrapper. Use with 'omnifunc'.
+                        Internally calls dbcp#complete().
+
+SQL COMPLETION                                  *dbcp-sql*
+
+Table name completion triggers after:
+- FROM
+- JOIN (INNER, LEFT, RIGHT, FULL, CROSS, etc.)
+- UPDATE
+- INTO
+- TABLE
+
+Example:
+>
+    SELECT * FROM <C-x><C-u>
+<
+
+Column name completion triggers after table/alias followed by dot:
+>
+    SELECT * FROM users u WHERE u.<C-x><C-u>
+<
+
+The completion engine automatically detects table aliases:
+>
+    SELECT * FROM orders AS o
+    INNER JOIN users u ON u.id = o.user_id
+    WHERE o.<C-x><C-u>   " completes columns from 'orders'
+<
+
+AUTO-QUOTING                                    *dbcp-quoting*
+
+Identifiers that require quoting are automatically quoted:
+- Reserved SQL keywords
+- Names with special characters or spaces
+- Case-sensitive identifiers
+
+Quote characters by dialect:
+- PostgreSQL, SQLite, Oracle: "identifier"
+- MySQL, MariaDB: `identifier`
+- SQL Server: [identifier]
+
+MONGODB COMPLETION                              *dbcp-mongodb*
+
+Context types:
+- db.<method> - database methods (getCollection, createCollection, etc.)
+- db.<collection> - collection names from the database
+- db.<collection>.<method> - collection methods (find, insertOne, etc.)
+- db.<collection>.<method>().<chain> - cursor methods (limit, sort, etc.)
+- $<operator> - MongoDB operators ($eq, $match, $group, etc.)
 
 ADAPTERS                                        *dbcp-adapters*
 
@@ -33,7 +96,13 @@ Adapters are located in:
 >
     autoload/dbcp/adapter/{db_type}.vim
 <
-Currently supported: mongodb
+Currently supported:
+- sqlite
+- postgres (also postgresql)
+- mysql (also mariadb)
+- sqlserver
+- oracle
+- mongodb
 
 WRITING ADAPTERS                                *dbcp-adapter-api*
 
