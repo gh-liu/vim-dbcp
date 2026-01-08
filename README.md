@@ -15,6 +15,7 @@ Completion framework for database queries, works with [vim-dadbod](https://githu
 
 ### NoSQL Databases
 - **MongoDB** - collection names, db/collection methods, cursor chain methods, operators
+- **Redis** - command names
 
 ## Requirements
 
