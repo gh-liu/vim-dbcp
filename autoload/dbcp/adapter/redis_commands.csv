@@ -1,0 +1,75 @@
+content,description,type
+GET,Get value,command
+SET,Set value,command
+DEL,Delete keys,command
+EXISTS,Check key exists,command
+EXPIRE,Set expiration,command
+TTL,Get TTL,command
+TYPE,Get value type,command
+KEYS,Find keys by pattern,command
+SCAN,Iterate keys,command
+MGET,Get multiple values,command
+MSET,Set multiple keys,command
+INCR,Increment,command
+DECR,Decrement,command
+HGET,Get hash field,command
+HSET,Set hash field,command
+HDEL,Delete hash fields,command
+HGETALL,Get all hash fields,command
+LPUSH,Push to list head,command
+RPUSH,Push to list tail,command
+LPOP,Pop from list head,command
+RPOP,Pop from list tail,command
+LLEN,Get list length,command
+SADD,Add set member,command
+SMEMBERS,Get all set members,command
+SISMEMBER,Check set membership,command
+ZADD,Add sorted set member,command
+ZRANGE,Get range by rank,command
+PUBLISH,Publish to channel,command
+INFO,Get server info,command
+CLIENT,Client commands,command
+CONFIG,Configuration,command
+ACL,Access control,command
+PING,Check connection,command
+AUTH,Authenticate,command
+SELECT,Select database,command
+FLUSHDB,Flush current database,command
+FLUSHALL,Flush all databases,command
+BGSAVE,Background save,command
+SAVE,Save database,command
+SHUTDOWN,Shutdown server,command
+EVAL,Evaluate Lua script,command
+MULTI,Start transaction,command
+EXEC,Execute transaction,command
+WATCH,Watch keys,command
+UNWATCH,Unwatch keys,command
+DBSIZE,Database size,command
+ECHO,Echo message,command
+QUIT,Quit connection,command
+COPY,Copy key,command
+MOVE,Move key,command
+RENAME,Rename key,command
+RENAMENX,Rename if not exists,command
+SORT,Sort elements,command
+BITCOUNT,Count bits,command
+BITOP,Bitwise operations,command
+GEOADD,Add geospatial,command
+GEORADIUS,Query by radius,command
+XADD,Add to stream,command
+XRANGE,Get stream range,command
+XREAD,Read from stream,command
+PFADD,Add to HyperLogLog,command
+PFCOUNT,Count unique,command
+PFMERGE,Merge HyperLogLogs,command
+WAIT,Wait for replication,command
+CLUSTER,Cluster commands,command
+MEMORY,Memory commands,command
+LATENCY,Latency monitoring,command
+SLOWLOG,Slow log,command
+OBJECT,Object commands,command
+TIME,Server time,command
+MODULE,Module commands,command
+REPLICAOF,Make replica,command
+ROLE,Show role info,command
+DEBUG,Debug commands,command

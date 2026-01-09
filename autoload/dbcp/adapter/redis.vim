@@ -20,58 +20,63 @@ let s:CTX_OPTION = 5
 let s:CACHE_TTL = 300
 
 " =============================================================================
-" Data Definitions
+" Data Definitions & Loading
 " =============================================================================
 
-let s:COMMANDS = [
-      \ ['GET', 'Get value'], ['SET', 'Set value'], ['DEL', 'Delete keys'],
-      \ ['EXISTS', 'Check key exists'], ['EXPIRE', 'Set expiration'], ['TTL', 'Get TTL'],
-      \ ['TYPE', 'Get value type'], ['KEYS', 'Find keys by pattern'], ['SCAN', 'Iterate keys'],
-      \ ['MGET', 'Get multiple values'], ['MSET', 'Set multiple keys'], ['INCR', 'Increment'],
-      \ ['DECR', 'Decrement'], ['HGET', 'Get hash field'], ['HSET', 'Set hash field'],
-      \ ['HDEL', 'Delete hash fields'], ['HGETALL', 'Get all hash fields'], ['LPUSH', 'Push to list head'],
-      \ ['RPUSH', 'Push to list tail'], ['LPOP', 'Pop from list head'], ['RPOP', 'Pop from list tail'],
-      \ ['LLEN', 'Get list length'], ['SADD', 'Add set member'], ['SMEMBERS', 'Get all set members'],
-      \ ['SISMEMBER', 'Check set membership'], ['ZADD', 'Add sorted set member'], ['ZRANGE', 'Get range by rank'],
-      \ ['PUBLISH', 'Publish to channel'], ['INFO', 'Get server info'], ['CLIENT', 'Client commands'],
-      \ ['CONFIG', 'Configuration'], ['ACL', 'Access control'], ['PING', 'Check connection'],
-      \ ['AUTH', 'Authenticate'], ['SELECT', 'Select database'], ['FLUSHDB', 'Flush current database'],
-      \ ['FLUSHALL', 'Flush all databases'], ['BGSAVE', 'Background save'], ['SAVE', 'Save database'],
-      \ ['SHUTDOWN', 'Shutdown server'], ['EVAL', 'Evaluate Lua script'], ['MULTI', 'Start transaction'],
-      \ ['EXEC', 'Execute transaction'], ['WATCH', 'Watch keys'], ['UNWATCH', 'Unwatch keys'],
-      \ ['DBSIZE', 'Database size'], ['ECHO', 'Echo message'], ['QUIT', 'Quit connection'],
-      \ ['COPY', 'Copy key'], ['MOVE', 'Move key'], ['RENAME', 'Rename key'], ['RENAMENX', 'Rename if not exists'],
-      \ ['SORT', 'Sort elements'], ['BITCOUNT', 'Count bits'], ['BITOP', 'Bitwise operations'],
-      \ ['GEOADD', 'Add geospatial'], ['GEORADIUS', 'Query by radius'], ['XADD', 'Add to stream'],
-      \ ['XRANGE', 'Get stream range'], ['XREAD', 'Read from stream'], ['PFADD', 'Add to HyperLogLog'],
-      \ ['PFCOUNT', 'Count unique'], ['PFMERGE', 'Merge HyperLogLogs'], ['WAIT', 'Wait for replication'],
-      \ ['CLUSTER', 'Cluster commands'], ['MEMORY', 'Memory commands'], ['LATENCY', 'Latency monitoring'],
-      \ ['SLOWLOG', 'Slow log'], ['OBJECT', 'Object commands'], ['TIME', 'Server time'],
-      \ ['MODULE', 'Module commands'], ['REPLICAOF', 'Make replica'], ['ROLE', 'Show role info'],
-      \ ['DEBUG', 'Debug commands']]
+let s:COMMANDS = v:null
+let s:SUBCOMMANDS = v:null
+let s:OPTIONS = v:null
+let s:KEY_COMMANDS = v:null
 
-let s:SUBCOMMANDS = {
-      \ 'CLIENT': [['LIST'], ['KILL'], ['SETNAME'], ['GETNAME'], ['ID'], ['INFO'], ['PAUSE'], ['UNPAUSE']],
-      \ 'CONFIG': [['GET'], ['SET'], ['REWRITE'], ['RESETSTAT'], ['RESET']],
-      \ 'ACL': [['LIST'], ['GETUSER'], ['SETUSER'], ['DELUSER'], ['CAT'], ['GENPASS'], ['WHOAMI'], ['LOG'], ['SAVE'], ['LOAD']],
-      \ 'CLUSTER': [['INFO'], ['NODES'], ['MEET'], ['FORGET'], ['REPLICATE'], ['REPLICAS'], ['FAILOVER'], ['SLOTS'], ['KEYSLOT']],
-      \ 'MEMORY': [['USAGE'], ['STATS'], ['MALLOC-STATS'], ['DOCTOR'], ['PURGE']],
-      \ 'LATENCY': [['HISTORY'], ['GRAPH'], ['LATEST'], ['RESET'], ['DOCTOR']],
-      \ 'SLOWLOG': [['GET'], ['LEN'], ['RESET']],
-      \ 'OBJECT': [['ENCODING'], ['FREQ'], ['IDLETIME'], ['REFCOUNT']],
-      \ 'MODULE': [['LIST'], ['LOAD'], ['UNLOAD'], ['LOADEX']],
-      \ 'DEBUG': [['OBJECT'], ['RELOAD'], ['RESTART'], ['SLEEP'], ['SEGFAULT']],
-      \ }
+let s:script_path = expand('<sfile>:p')
 
-let s:OPTIONS = {
-      \ 'SET': [['EX'], ['PX'], ['EXAT'], ['PXAT'], ['NX'], ['XX'], ['GET'], ['KEEPTTL']],
-      \ }
+function! s:load_commands() abort
+  if s:COMMANDS isnot v:null | return s:COMMANDS | endif
+  let l:csv = dbcp#csv#load('redis_commands.csv', s:script_path)
+  let s:COMMANDS = l:csv is v:null ? [] : map(l:csv, {_, v -> [v[0], v[1]]})
+  return s:COMMANDS
+endfunction
 
-let s:KEY_COMMANDS = ['GET', 'SET', 'DEL', 'EXISTS', 'EXPIRE', 'TTL', 'TYPE', 'MGET', 'MSET',
-      \ 'INCR', 'DECR', 'COPY', 'MOVE', 'RENAME', 'RENAMENX', 'HGET', 'HSET', 'HDEL', 'HGETALL',
-      \ 'LPUSH', 'RPUSH', 'LPOP', 'RPOP', 'LLEN', 'SADD', 'SMEMBERS', 'SISMEMBER', 'ZADD', 'ZRANGE',
-      \ 'WATCH', 'SORT', 'BITCOUNT', 'BITOP', 'GEOADD', 'GEORADIUS', 'XADD', 'XRANGE', 'XREAD',
-      \ 'PFADD', 'PFCOUNT', 'PFMERGE']
+function! s:load_subcommands() abort
+  if s:SUBCOMMANDS isnot v:null | return s:SUBCOMMANDS | endif
+  let l:csv = dbcp#csv#load('redis_subcommands.csv', s:script_path)
+  let s:SUBCOMMANDS = {}
+  if l:csv isnot v:null
+    for l:row in l:csv
+      if len(l:row) >= 4
+        if !has_key(s:SUBCOMMANDS, l:row[3])
+          let s:SUBCOMMANDS[l:row[3]] = []
+        endif
+        call add(s:SUBCOMMANDS[l:row[3]], [l:row[0]])
+      endif
+    endfor
+  endif
+  return s:SUBCOMMANDS
+endfunction
+
+function! s:load_options() abort
+  if s:OPTIONS isnot v:null | return s:OPTIONS | endif
+  let l:csv = dbcp#csv#load('redis_options.csv', s:script_path)
+  let s:OPTIONS = {}
+  if l:csv isnot v:null
+    for l:row in l:csv
+      if len(l:row) >= 4
+        if !has_key(s:OPTIONS, l:row[3])
+          let s:OPTIONS[l:row[3]] = []
+        endif
+        call add(s:OPTIONS[l:row[3]], [l:row[0]])
+      endif
+    endfor
+  endif
+  return s:OPTIONS
+endfunction
+
+function! s:load_key_commands() abort
+  if s:KEY_COMMANDS isnot v:null | return s:KEY_COMMANDS | endif
+  let l:csv = dbcp#csv#load('redis_key_commands.csv', s:script_path)
+  let s:KEY_COMMANDS = l:csv is v:null ? [] : map(l:csv, {_, v -> v[0]})
+  return s:KEY_COMMANDS
+endfunction
 
 " =============================================================================
 " Helper Functions
@@ -123,7 +128,8 @@ function! s:get_context() abort
   if l:last_pos == -1 | let l:last_pos = len(l:multiline) - len(l:last_part) | endif
   
   " Subcommand: CLIENT LIST, CONFIG GET, etc.
-  if has_key(s:SUBCOMMANDS, l:cmd) && l:len == 2 && l:last_part =~# '^\w*$'
+  let l:subcommands = s:load_subcommands()
+  if has_key(l:subcommands, l:cmd) && l:len == 2 && l:last_part =~# '^\w*$'
     return [s:CTX_SUBCOMMAND, l:offset + l:last_pos, l:cmd, '']
   endif
   
@@ -140,7 +146,8 @@ function! s:get_context() abort
   endif
   
   " Key: command key
-  if index(s:KEY_COMMANDS, l:cmd) >= 0 && l:len == 2 && l:last_part =~# '^\w*$'
+  let l:key_commands = s:load_key_commands()
+  if index(l:key_commands, l:cmd) >= 0 && l:len == 2 && l:last_part =~# '^\w*$'
     return [s:CTX_KEY, l:offset + l:last_pos, l:cmd, '']
   endif
   
@@ -256,14 +263,16 @@ function! dbcp#adapter#redis#complete(findstart, base, db_url) abort
   let [l:type, _, l:cmd, l:extra] = s:saved_ctx
   
   if l:type == s:CTX_COMMAND
-    return s:filter(a:base, s:make_items(s:COMMANDS))
+    return s:filter(a:base, s:make_items(s:load_commands()))
   elseif l:type == s:CTX_SUBCOMMAND
-    let l:subs = get(s:SUBCOMMANDS, l:cmd, [])
+    let l:subcommands = s:load_subcommands()
+    let l:subs = get(l:subcommands, l:cmd, [])
     if !empty(l:subs)
       return s:filter(a:base, s:make_items(l:subs))
     endif
   elseif l:type == s:CTX_OPTION
-    let l:opts = get(s:OPTIONS, l:cmd, [])
+    let l:options = s:load_options()
+    let l:opts = get(l:options, l:cmd, [])
     if !empty(l:opts)
       return s:filter(a:base, s:make_items(l:opts))
     endif

@@ -1,0 +1,59 @@
+content,description,type,parent_command
+LIST,List clients,subcommand,CLIENT
+KILL,Kill client,subcommand,CLIENT
+SETNAME,Set client name,subcommand,CLIENT
+GETNAME,Get client name,subcommand,CLIENT
+ID,Get client ID,subcommand,CLIENT
+INFO,Get client info,subcommand,CLIENT
+PAUSE,Pause client,subcommand,CLIENT
+UNPAUSE,Unpause client,subcommand,CLIENT
+GET,Get config,subcommand,CONFIG
+SET,Set config,subcommand,CONFIG
+REWRITE,Rewrite config file,subcommand,CONFIG
+RESETSTAT,Reset stats,subcommand,CONFIG
+RESET,Reset config,subcommand,CONFIG
+LIST,List ACL users,subcommand,ACL
+GETUSER,Get user info,subcommand,ACL
+SETUSER,Set user,subcommand,ACL
+DELUSER,Delete user,subcommand,ACL
+CAT,List categories,subcommand,ACL
+GENPASS,Generate password,subcommand,ACL
+WHOAMI,Who am I,subcommand,ACL
+LOG,ACL log,subcommand,ACL
+SAVE,Save ACL,subcommand,ACL
+LOAD,Load ACL,subcommand,ACL
+INFO,Cluster info,subcommand,CLUSTER
+NODES,Cluster nodes,subcommand,CLUSTER
+MEET,Meet node,subcommand,CLUSTER
+FORGET,Forget node,subcommand,CLUSTER
+REPLICATE,Replicate node,subcommand,CLUSTER
+REPLICAS,List replicas,subcommand,CLUSTER
+FAILOVER,Failover,subcommand,CLUSTER
+SLOTS,Cluster slots,subcommand,CLUSTER
+KEYSLOT,Key slot,subcommand,CLUSTER
+USAGE,Memory usage,subcommand,MEMORY
+STATS,Memory stats,subcommand,MEMORY
+MALLOC-STATS,Malloc stats,subcommand,MEMORY
+DOCTOR,Memory doctor,subcommand,MEMORY
+PURGE,Memory purge,subcommand,MEMORY
+HISTORY,Latency history,subcommand,LATENCY
+GRAPH,Latency graph,subcommand,LATENCY
+LATEST,Latest latency,subcommand,LATENCY
+RESET,Reset latency,subcommand,LATENCY
+DOCTOR,Latency doctor,subcommand,LATENCY
+GET,Get slow log,subcommand,SLOWLOG
+LEN,Slow log length,subcommand,SLOWLOG
+RESET,Reset slow log,subcommand,SLOWLOG
+ENCODING,Object encoding,subcommand,OBJECT
+FREQ,Object frequency,subcommand,OBJECT
+IDLETIME,Object idle time,subcommand,OBJECT
+REFCOUNT,Object refcount,subcommand,OBJECT
+LIST,List modules,subcommand,MODULE
+LOAD,Load module,subcommand,MODULE
+UNLOAD,Unload module,subcommand,MODULE
+LOADEX,Load module extended,subcommand,MODULE
+OBJECT,Debug object,subcommand,DEBUG
+RELOAD,Reload,subcommand,DEBUG
+RESTART,Restart,subcommand,DEBUG
+SLEEP,Sleep,subcommand,DEBUG
+SEGFAULT,Segfault,subcommand,DEBUG

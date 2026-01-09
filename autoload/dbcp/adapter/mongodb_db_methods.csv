@@ -1,0 +1,15 @@
+content,description,type
+adminCommand,run admin command,db_method
+aggregate,db-level aggregation,db_method
+createCollection,create collection,db_method
+createView,create view,db_method
+dropDatabase,drop current database,db_method
+getCollection,get collection object,db_method
+getCollectionNames,list collection names,db_method
+getMongo,get Mongo connection,db_method
+getName,get database name,db_method
+getSiblingDB,get another database,db_method
+listCommands,list commands,db_method
+runCommand,run database command,db_method
+stats,database statistics,db_method
+version,server version,db_method

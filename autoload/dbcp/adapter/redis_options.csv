@@ -1,0 +1,9 @@
+content,description,type,parent_command
+EX,Set expiration in seconds,option,SET
+PX,Set expiration in milliseconds,option,SET
+EXAT,Set expiration timestamp in seconds,option,SET
+PXAT,Set expiration timestamp in milliseconds,option,SET
+NX,Only set if not exists,option,SET
+XX,Only set if exists,option,SET
+GET,Return old value,option,SET
+KEEPTTL,Keep existing TTL,option,SET

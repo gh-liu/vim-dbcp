@@ -1,0 +1,261 @@
+content,description,type
+ACCESSIBLE,ACCESSIBLE modifier,keyword
+ADD,ADD clause,keyword
+ALL,ALL modifier,keyword
+ALTER,ALTER statement,keyword
+ANALYZE,ANALYZE statement,keyword
+AND,AND operator,keyword
+AS,AS alias,keyword
+ASC,ASC order,keyword
+ASENSITIVE,ASENSITIVE modifier,keyword
+BEFORE,BEFORE trigger,keyword
+BETWEEN,BETWEEN operator,keyword
+BIGINT,BIGINT type,keyword
+BINARY,BINARY type,keyword
+BLOB,BLOB type,keyword
+BOTH,BOTH modifier,keyword
+BY,ORDER BY / GROUP BY,keyword
+CALL,CALL statement,keyword
+CASCADE,CASCADE modifier,keyword
+CASE,CASE expression,keyword
+CHANGE,CHANGE clause,keyword
+CHAR,CHAR type,keyword
+CHARACTER,CHARACTER type,keyword
+CHECK,CHECK constraint,keyword
+COLLATE,COLLATE clause,keyword
+COLUMN,COLUMN,keyword
+CONDITION,CONDITION,keyword
+CONSTRAINT,CONSTRAINT,keyword
+CONTINUE,CONTINUE statement,keyword
+CONVERT,CONVERT function,keyword
+CREATE,CREATE statement,keyword
+CROSS,CROSS join,keyword
+CUBE,CUBE modifier,keyword
+CUME_DIST,CUME_DIST function,keyword
+CURRENT_DATE,CURRENT_DATE,keyword
+CURRENT_TIME,CURRENT_TIME,keyword
+CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,keyword
+CURRENT_USER,CURRENT_USER,keyword
+CURSOR,CURSOR,keyword
+DATABASE,DATABASE,keyword
+DATABASES,DATABASES,keyword
+DAY_HOUR,DAY_HOUR interval,keyword
+DAY_MICROSECOND,DAY_MICROSECOND interval,keyword
+DAY_MINUTE,DAY_MINUTE interval,keyword
+DAY_SECOND,DAY_SECOND interval,keyword
+DEC,DEC type,keyword
+DECIMAL,DECIMAL type,keyword
+DECLARE,DECLARE statement,keyword
+DEFAULT,DEFAULT value,keyword
+DELAYED,DELAYED modifier,keyword
+DELETE,DELETE statement,keyword
+DENSE_RANK,DENSE_RANK function,keyword
+DESC,DESC order,keyword
+DESCRIBE,DESCRIBE statement,keyword
+DETERMINISTIC,DETERMINISTIC function,keyword
+DISTINCT,DISTINCT modifier,keyword
+DISTINCTROW,DISTINCTROW modifier,keyword
+DIV,DIV operator,keyword
+DOUBLE,DOUBLE type,keyword
+DROP,DROP statement,keyword
+DUAL,DUAL table,keyword
+EACH,EACH modifier,keyword
+ELSE,ELSE clause,keyword
+ELSEIF,ELSEIF clause,keyword
+EMPTY,EMPTY modifier,keyword
+ENCLOSED,ENCLOSED modifier,keyword
+ESCAPED,ESCAPED modifier,keyword
+EXCEPT,EXCEPT operator,keyword
+EXISTS,EXISTS operator,keyword
+EXIT,EXIT statement,keyword
+EXPLAIN,EXPLAIN statement,keyword
+FALSE,FALSE value,keyword
+FETCH,FETCH statement,keyword
+FIRST_VALUE,FIRST_VALUE function,keyword
+FLOAT,FLOAT type,keyword
+FLOAT4,FLOAT4 type,keyword
+FLOAT8,FLOAT8 type,keyword
+FOR,FOR clause,keyword
+FORCE,FORCE index hint,keyword
+FOREIGN,FOREIGN key,keyword
+FROM,FROM clause,keyword
+FULLTEXT,FULLTEXT index,keyword
+FUNCTION,FUNCTION,keyword
+GENERATED,GENERATED column,keyword
+GET,GET statement,keyword
+GRANT,GRANT statement,keyword
+GROUP,GROUP BY,keyword
+GROUPING,GROUPING function,keyword
+GROUPS,GROUPS modifier,keyword
+HAVING,HAVING clause,keyword
+HIGH_PRIORITY,HIGH_PRIORITY modifier,keyword
+HOUR_MICROSECOND,HOUR_MICROSECOND interval,keyword
+HOUR_MINUTE,HOUR_MINUTE interval,keyword
+HOUR_SECOND,HOUR_SECOND interval,keyword
+IF,IF statement,keyword
+IGNORE,IGNORE modifier,keyword
+IN,IN operator,keyword
+INDEX,INDEX,keyword
+INFILE,INFILE clause,keyword
+INNER,INNER join,keyword
+INOUT,INOUT parameter,keyword
+INSENSITIVE,INSENSITIVE modifier,keyword
+INSERT,INSERT statement,keyword
+INT,INT type,keyword
+INT1,INT1 type,keyword
+INT2,INT2 type,keyword
+INT3,INT3 type,keyword
+INT4,INT4 type,keyword
+INT8,INT8 type,keyword
+INTEGER,INTEGER type,keyword
+INTERVAL,INTERVAL type,keyword
+INTO,INSERT INTO,keyword
+IO_AFTER_GTIDS,IO_AFTER_GTIDS,keyword
+IO_BEFORE_GTIDS,IO_BEFORE_GTIDS,keyword
+IS,IS operator,keyword
+ITERATE,ITERATE statement,keyword
+JOIN,JOIN clause,keyword
+JSON_TABLE,JSON_TABLE function,keyword
+KEY,KEY,keyword
+KEYS,KEYS,keyword
+KILL,KILL statement,keyword
+LAG,LAG function,keyword
+LAST_VALUE,LAST_VALUE function,keyword
+LATERAL,LATERAL join,keyword
+LEAD,LEAD function,keyword
+LEADING,LEADING modifier,keyword
+LEAVE,LEAVE statement,keyword
+LEFT,LEFT join,keyword
+LIKE,LIKE operator,keyword
+LIMIT,LIMIT clause,keyword
+LINEAR,LINEAR modifier,keyword
+LINES,LINES clause,keyword
+LOAD,LOAD statement,keyword
+LOCALTIME,LOCALTIME,keyword
+LOCALTIMESTAMP,LOCALTIMESTAMP,keyword
+LOCK,LOCK statement,keyword
+LONG,LONG type,keyword
+LONGBLOB,LONGBLOB type,keyword
+LONGTEXT,LONGTEXT type,keyword
+LOOP,LOOP statement,keyword
+LOW_PRIORITY,LOW_PRIORITY modifier,keyword
+MASTER_BIND,MASTER_BIND,keyword
+MATCH,MATCH function,keyword
+MAXVALUE,MAXVALUE,keyword
+MEDIUMBLOB,MEDIUMBLOB type,keyword
+MEDIUMINT,MEDIUMINT type,keyword
+MEDIUMTEXT,MEDIUMTEXT type,keyword
+MIDDLEINT,MIDDLEINT type,keyword
+MINUTE_MICROSECOND,MINUTE_MICROSECOND interval,keyword
+MINUTE_SECOND,MINUTE_SECOND interval,keyword
+MOD,MOD operator,keyword
+MODIFIES,MODIFIES modifier,keyword
+NATURAL,NATURAL join,keyword
+NOT,NOT operator,keyword
+NO_WRITE_TO_BINLOG,NO_WRITE_TO_BINLOG modifier,keyword
+NTH_VALUE,NTH_VALUE function,keyword
+NTILE,NTILE function,keyword
+NULL,NULL value,keyword
+NUMERIC,NUMERIC type,keyword
+OF,OF clause,keyword
+ON,ON condition,keyword
+OPTIMIZE,OPTIMIZE statement,keyword
+OPTIMIZER_COSTS,OPTIMIZER_COSTS,keyword
+OPTION,OPTION clause,keyword
+OPTIONALLY,OPTIONALLY modifier,keyword
+OR,OR operator,keyword
+ORDER,ORDER BY,keyword
+OUT,OUT parameter,keyword
+OUTER,OUTER join,keyword
+OUTFILE,OUTFILE clause,keyword
+OVER,OVER clause,keyword
+PARTITION,PARTITION,keyword
+PERCENT_RANK,PERCENT_RANK function,keyword
+PRECISION,PRECISION,keyword
+PRIMARY,PRIMARY key,keyword
+PROCEDURE,PROCEDURE,keyword
+PURGE,PURGE statement,keyword
+RANGE,RANGE partition,keyword
+RANK,RANK function,keyword
+READ,READ lock,keyword
+READS,READS modifier,keyword
+READ_WRITE,READ_WRITE modifier,keyword
+REAL,REAL type,keyword
+RECURSIVE,RECURSIVE CTE,keyword
+REFERENCES,REFERENCES,keyword
+REGEXP,REGEXP operator,keyword
+RELEASE,RELEASE statement,keyword
+RENAME,RENAME statement,keyword
+REPEAT,REPEAT statement,keyword
+REPLACE,REPLACE statement,keyword
+REQUIRE,REQUIRE clause,keyword
+RESIGNAL,RESIGNAL statement,keyword
+RESTRICT,RESTRICT modifier,keyword
+RETURN,RETURN statement,keyword
+REVOKE,REVOKE statement,keyword
+RIGHT,RIGHT join,keyword
+RLIKE,RLIKE operator,keyword
+ROW,ROW type,keyword
+ROWS,ROWS clause,keyword
+ROW_NUMBER,ROW_NUMBER function,keyword
+SCHEMA,SCHEMA,keyword
+SCHEMAS,SCHEMAS,keyword
+SECOND_MICROSECOND,SECOND_MICROSECOND interval,keyword
+SELECT,SELECT statement,keyword
+SENSITIVE,SENSITIVE modifier,keyword
+SEPARATOR,SEPARATOR,keyword
+SET,SET clause,keyword
+SHOW,SHOW statement,keyword
+SIGNAL,SIGNAL statement,keyword
+SMALLINT,SMALLINT type,keyword
+SPATIAL,SPATIAL index,keyword
+SPECIFIC,SPECIFIC modifier,keyword
+SQL,SQL,keyword
+SQLEXCEPTION,SQLEXCEPTION,keyword
+SQLSTATE,SQLSTATE,keyword
+SQLWARNING,SQLWARNING,keyword
+SQL_BIG_RESULT,SQL_BIG_RESULT modifier,keyword
+SQL_CALC_FOUND_ROWS,SQL_CALC_FOUND_ROWS modifier,keyword
+SQL_SMALL_RESULT,SQL_SMALL_RESULT modifier,keyword
+SSL,SSL,keyword
+STARTING,STARTING clause,keyword
+STORED,STORED generated column,keyword
+STRAIGHT_JOIN,STRAIGHT_JOIN,keyword
+SYSTEM,SYSTEM modifier,keyword
+TABLE,CREATE TABLE,keyword
+TERMINATED,TERMINATED clause,keyword
+THEN,THEN clause,keyword
+TINYBLOB,TINYBLOB type,keyword
+TINYINT,TINYINT type,keyword
+TINYTEXT,TINYTEXT type,keyword
+TO,TO clause,keyword
+TRAILING,TRAILING modifier,keyword
+TRIGGER,TRIGGER,keyword
+TRUE,TRUE value,keyword
+UNDO,UNDO statement,keyword
+UNION,UNION operator,keyword
+UNIQUE,UNIQUE constraint,keyword
+UNLOCK,UNLOCK statement,keyword
+UNSIGNED,UNSIGNED modifier,keyword
+UPDATE,UPDATE statement,keyword
+USAGE,USAGE privilege,keyword
+USE,USE statement,keyword
+USING,USING clause,keyword
+UTC_DATE,UTC_DATE,keyword
+UTC_TIME,UTC_TIME,keyword
+UTC_TIMESTAMP,UTC_TIMESTAMP,keyword
+VALUES,VALUES clause,keyword
+VARBINARY,VARBINARY type,keyword
+VARCHAR,VARCHAR type,keyword
+VARCHARACTER,VARCHARACTER type,keyword
+VARYING,VARYING modifier,keyword
+VIRTUAL,VIRTUAL generated column,keyword
+WHEN,WHEN clause,keyword
+WHERE,WHERE clause,keyword
+WHILE,WHILE statement,keyword
+WINDOW,WINDOW function,keyword
+WITH,WITH clause,keyword
+WRITE,WRITE lock,keyword
+XOR,XOR operator,keyword
+YEAR_MONTH,YEAR_MONTH interval,keyword
+ZEROFILL,ZEROFILL modifier,keyword

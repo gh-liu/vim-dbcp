@@ -1,0 +1,48 @@
+content,description,type
+$eq,equal,operator
+$ne,not equal,operator
+$gt,greater than,operator
+$gte,greater than or equal,operator
+$lt,less than,operator
+$lte,less than or equal,operator
+$in,in array,operator
+$nin,not in array,operator
+$exists,field exists,operator
+$type,field type,operator
+$regex,regex match,operator
+$expr,aggregation expression,operator
+$and,logical AND,operator
+$or,logical OR,operator
+$not,logical NOT,operator
+$nor,logical NOR,operator
+$elemMatch,array element match,operator
+$all,array contains all,operator
+$size,array size,operator
+$set,set field value,operator
+$unset,remove field,operator
+$inc,increment value,operator
+$push,push to array,operator
+$pull,pull from array,operator
+$addToSet,add unique to array,operator
+$pop,pop from array,operator
+$rename,rename field,operator
+$min,update if less,operator
+$max,update if greater,operator
+$mul,multiply value,operator
+$match,filter documents,operator
+$group,group by field,operator
+$project,reshape documents,operator
+$sort,sort documents,operator
+$limit,limit results,operator
+$skip,skip documents,operator
+$unwind,deconstruct array,operator
+$lookup,join collections,operator
+$addFields,add computed fields,operator
+$count,count documents,operator
+$facet,multiple pipelines,operator
+$bucket,categorize into buckets,operator
+$merge,merge into collection,operator
+$out,output to collection,operator
+$replaceRoot,replace root document,operator
+$sample,random sample,operator
+$unionWith,union with collection,operator

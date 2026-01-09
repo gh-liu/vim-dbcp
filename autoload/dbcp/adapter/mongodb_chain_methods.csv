@@ -1,0 +1,21 @@
+content,description,type
+explain,explain query execution,chain_method
+toArray,convert cursor to array,chain_method
+forEach,iterate over cursor,chain_method
+hasNext,check if more documents,chain_method
+next,get next document,chain_method
+limit,limit number of results,chain_method
+skip,skip number of results,chain_method
+sort,sort results,chain_method
+project,project fields,chain_method
+count,count documents,chain_method
+map,map over cursor,chain_method
+filter,filter cursor,chain_method
+batchSize,set batch size,chain_method
+maxTimeMS,set max time,chain_method
+hint,use index hint,chain_method
+max,max value,chain_method
+min,min value,chain_method
+readPref,read preference,chain_method
+readConcern,read concern,chain_method
+collation,collation,chain_method

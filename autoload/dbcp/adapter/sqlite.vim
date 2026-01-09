@@ -7,33 +7,15 @@ if exists('g:autoloaded_dbcp_adapter_sqlite')
 endif
 let g:autoloaded_dbcp_adapter_sqlite = 1
 
+let s:script_path = expand('<sfile>:p')
+let s:dialect_cache = v:null
+
 function! dbcp#adapter#sqlite#get_dialect() abort
-  return {
-        \ 'quote': '"',
-        \ 'escape': '"',
-        \ 'keywords': ['ABORT', 'ACTION', 'ADD', 'AFTER', 'ALL', 'ALTER', 'ANALYZE',
-        \   'AND', 'AS', 'ASC', 'ATTACH', 'AUTOINCREMENT', 'BEFORE', 'BEGIN',
-        \   'BETWEEN', 'BY', 'CASCADE', 'CASE', 'CAST', 'CHECK', 'COLLATE',
-        \   'COLUMN', 'COMMIT', 'CONFLICT', 'CONSTRAINT', 'CREATE', 'CROSS',
-        \   'CURRENT', 'CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP',
-        \   'DATABASE', 'DEFAULT', 'DEFERRABLE', 'DEFERRED', 'DELETE', 'DESC',
-        \   'DETACH', 'DISTINCT', 'DO', 'DROP', 'EACH', 'ELSE', 'END', 'ESCAPE',
-        \   'EXCEPT', 'EXCLUDE', 'EXCLUSIVE', 'EXISTS', 'EXPLAIN', 'FAIL',
-        \   'FILTER', 'FIRST', 'FOLLOWING', 'FOR', 'FOREIGN', 'FROM', 'FULL',
-        \   'GLOB', 'GROUP', 'GROUPS', 'HAVING', 'IF', 'IGNORE', 'IMMEDIATE',
-        \   'IN', 'INDEX', 'INDEXED', 'INITIALLY', 'INNER', 'INSERT', 'INSTEAD',
-        \   'INTERSECT', 'INTO', 'IS', 'ISNULL', 'JOIN', 'KEY', 'LAST', 'LEFT',
-        \   'LIKE', 'LIMIT', 'MATCH', 'NATURAL', 'NO', 'NOT', 'NOTHING',
-        \   'NOTNULL', 'NULL', 'NULLS', 'OF', 'OFFSET', 'ON', 'OR', 'ORDER',
-        \   'OTHERS', 'OUTER', 'OVER', 'PARTITION', 'PLAN', 'PRAGMA', 'PRECEDING',
-        \   'PRIMARY', 'QUERY', 'RAISE', 'RANGE', 'RECURSIVE', 'REFERENCES',
-        \   'REGEXP', 'REINDEX', 'RELEASE', 'RENAME', 'REPLACE', 'RESTRICT',
-        \   'RIGHT', 'ROLLBACK', 'ROW', 'ROWS', 'SAVEPOINT', 'SELECT', 'SET',
-        \   'TABLE', 'TEMP', 'TEMPORARY', 'THEN', 'TIES', 'TO', 'TRANSACTION',
-        \   'TRIGGER', 'UNBOUNDED', 'UNION', 'UNIQUE', 'UPDATE', 'USING',
-        \   'VACUUM', 'VALUES', 'VIEW', 'VIRTUAL', 'WHEN', 'WHERE', 'WINDOW',
-        \   'WITH', 'WITHOUT'],
-        \ }
+  if s:dialect_cache isnot v:null | return s:dialect_cache | endif
+  let l:csv = dbcp#csv#load('sqlite_keywords.csv', s:script_path)
+  let l:keywords = l:csv is v:null ? [] : map(l:csv, {_, v -> v[0]})
+  let s:dialect_cache = {'quote': '"', 'escape': '"', 'keywords': l:keywords}
+  return s:dialect_cache
 endfunction
 
 function! dbcp#adapter#sqlite#complete(findstart, base, db_url) abort

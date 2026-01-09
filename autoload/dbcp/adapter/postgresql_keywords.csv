@@ -1,0 +1,100 @@
+content,description,type
+ALL,ALL modifier,keyword
+ANALYSE,ANALYSE statement,keyword
+ANALYZE,ANALYZE statement,keyword
+AND,AND operator,keyword
+ANY,ANY operator,keyword
+ARRAY,ARRAY type,keyword
+AS,AS alias,keyword
+ASC,ASC order,keyword
+ASYMMETRIC,ASYMMETRIC modifier,keyword
+AUTHORIZATION,AUTHORIZATION,keyword
+BINARY,BINARY type,keyword
+BOTH,BOTH modifier,keyword
+CASE,CASE expression,keyword
+CAST,CAST function,keyword
+CHECK,CHECK constraint,keyword
+COLLATE,COLLATE clause,keyword
+COLLATION,COLLATION,keyword
+COLUMN,COLUMN,keyword
+CONCURRENTLY,CONCURRENTLY modifier,keyword
+CONSTRAINT,CONSTRAINT,keyword
+CREATE,CREATE statement,keyword
+CROSS,CROSS join,keyword
+CURRENT_CATALOG,CURRENT_CATALOG,keyword
+CURRENT_DATE,CURRENT_DATE,keyword
+CURRENT_ROLE,CURRENT_ROLE,keyword
+CURRENT_SCHEMA,CURRENT_SCHEMA,keyword
+CURRENT_TIME,CURRENT_TIME,keyword
+CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,keyword
+CURRENT_USER,CURRENT_USER,keyword
+DEFAULT,DEFAULT value,keyword
+DEFERRABLE,DEFERRABLE constraint,keyword
+DESC,DESC order,keyword
+DISTINCT,DISTINCT modifier,keyword
+DO,DO statement,keyword
+ELSE,ELSE clause,keyword
+END,END statement,keyword
+EXCEPT,EXCEPT operator,keyword
+FALSE,FALSE value,keyword
+FETCH,FETCH statement,keyword
+FOR,FOR clause,keyword
+FOREIGN,FOREIGN key,keyword
+FROM,FROM clause,keyword
+FULL,FULL join,keyword
+GRANT,GRANT statement,keyword
+GROUP,GROUP BY,keyword
+HAVING,HAVING clause,keyword
+ILIKE,ILIKE operator,keyword
+IN,IN operator,keyword
+INITIALLY,INITIALLY modifier,keyword
+INNER,INNER join,keyword
+INTERSECT,INTERSECT operator,keyword
+INTO,INSERT INTO,keyword
+IS,IS operator,keyword
+ISNULL,ISNULL function,keyword
+JOIN,JOIN clause,keyword
+LATERAL,LATERAL join,keyword
+LEADING,LEADING modifier,keyword
+LEFT,LEFT join,keyword
+LIKE,LIKE operator,keyword
+LIMIT,LIMIT clause,keyword
+LOCALTIME,LOCALTIME,keyword
+LOCALTIMESTAMP,LOCALTIMESTAMP,keyword
+NATURAL,NATURAL join,keyword
+NOT,NOT operator,keyword
+NOTNULL,NOTNULL function,keyword
+NULL,NULL value,keyword
+OFFSET,OFFSET clause,keyword
+ON,ON condition,keyword
+ONLY,ONLY modifier,keyword
+OR,OR operator,keyword
+ORDER,ORDER BY,keyword
+OUTER,OUTER join,keyword
+OVERLAPS,OVERLAPS operator,keyword
+PLACING,PLACING clause,keyword
+PRIMARY,PRIMARY key,keyword
+REFERENCES,REFERENCES,keyword
+RETURNING,RETURNING clause,keyword
+RIGHT,RIGHT join,keyword
+SELECT,SELECT statement,keyword
+SESSION_USER,SESSION_USER,keyword
+SIMILAR,SIMILAR operator,keyword
+SOME,SOME operator,keyword
+SYMMETRIC,SYMMETRIC modifier,keyword
+TABLE,CREATE TABLE,keyword
+TABLESAMPLE,TABLESAMPLE clause,keyword
+THEN,THEN clause,keyword
+TO,TO clause,keyword
+TRAILING,TRAILING modifier,keyword
+TRUE,TRUE value,keyword
+UNION,UNION operator,keyword
+UNIQUE,UNIQUE constraint,keyword
+USER,USER,keyword
+USING,USING clause,keyword
+VARIADIC,VARIADIC parameter,keyword
+VERBOSE,VERBOSE modifier,keyword
+WHEN,WHEN clause,keyword
+WHERE,WHERE clause,keyword
+WINDOW,WINDOW function,keyword
+WITH,WITH clause,keyword

@@ -17,10 +17,15 @@ let s:CTX_TABLE = 1       " FROM/JOIN/UPDATE/INTO/DELETE FROM - expecting table 
 let s:CTX_COLUMN = 2      " alias./table. - expecting column name
 let s:CTX_SCHEMA = 3      " schema. - expecting table name within schema
 
-" SQL keywords that precede table names (case-insensitive patterns)
-let s:TABLE_KEYWORDS = ['FROM', 'JOIN', 'INNER_JOIN', 'LEFT_JOIN', 'RIGHT_JOIN',
-      \ 'FULL_JOIN', 'CROSS_JOIN', 'LEFT_OUTER_JOIN', 'RIGHT_OUTER_JOIN',
-      \ 'FULL_OUTER_JOIN', 'UPDATE', 'INTO', 'TABLE']
+let s:script_path = expand('<sfile>:p')
+let s:TABLE_KEYWORDS = v:null
+
+function! s:load_table_keywords() abort
+  if s:TABLE_KEYWORDS isnot v:null | return s:TABLE_KEYWORDS | endif
+  let l:csv = dbcp#csv#load('sql_table_keywords.csv', s:script_path)
+  let s:TABLE_KEYWORDS = l:csv is v:null ? [] : map(l:csv, {_, v -> v[0]})
+  return s:TABLE_KEYWORDS
+endfunction
 
 " Pattern to match identifier (table/alias name)
 let s:IDENT_PATTERN = '\v[A-Za-z_][A-Za-z0-9_]*'
@@ -50,14 +55,9 @@ function! s:get_dialect(scheme) abort
   
   " Fallback to minimal SQL dialect (SQL-92 core keywords)
   if !has_key(s:dialect_cache, '_default')
-    let s:dialect_cache['_default'] = {
-          \ 'quote': '"',
-          \ 'escape': '"',
-          \ 'keywords': ['SELECT', 'FROM', 'WHERE', 'JOIN', 'INNER', 'LEFT', 'RIGHT', 'FULL', 'OUTER', 'CROSS',
-          \   'ON', 'AS', 'AND', 'OR', 'NOT', 'IN', 'IS', 'NULL', 'LIKE', 'BETWEEN',
-          \   'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE', 'CREATE', 'TABLE', 'ALTER', 'DROP',
-          \   'ORDER', 'BY', 'ASC', 'DESC', 'GROUP', 'HAVING', 'UNION', 'DISTINCT', 'LIMIT', 'OFFSET']
-          \ }
+    let l:csv = dbcp#csv#load('sql_keywords_default.csv', s:script_path)
+    let l:keywords = l:csv is v:null ? [] : map(l:csv, {_, v -> v[0]})
+    let s:dialect_cache['_default'] = {'quote': '"', 'escape': '"', 'keywords': l:keywords}
   endif
   return s:dialect_cache['_default']
 endfunction
@@ -210,10 +210,19 @@ endfunction
 " =============================================================================
 
 let s:ctx_cache = {'line': -1, 'col': -1, 'text': '', 'aliases': {}}
-let s:non_alias_kw = {'where': 1, 'on': 1, 'and': 1, 'or': 1, 'set': 1, 'values': 1,
-      \ 'left': 1, 'right': 1, 'inner': 1, 'outer': 1, 'cross': 1, 'full': 1,
-      \ 'natural': 1, 'order': 1, 'group': 1, 'having': 1, 'limit': 1, 'offset': 1,
-      \ 'union': 1, 'except': 1, 'intersect': 1}
+let s:non_alias_kw = v:null
+
+function! s:load_non_alias_keywords() abort
+  if s:non_alias_kw isnot v:null | return s:non_alias_kw | endif
+  let l:csv = dbcp#csv#load('sql_non_alias_keywords.csv', s:script_path)
+  let s:non_alias_kw = {}
+  if l:csv isnot v:null
+    for l:row in l:csv
+      let s:non_alias_kw[tolower(l:row[0])] = 1
+    endfor
+  endif
+  return s:non_alias_kw
+endfunction
 
 function! s:get_context_text() abort
   let l:ln = line('.')
@@ -250,7 +259,7 @@ function! s:extract_aliases(text) abort
     let l:alias_m = matchlist(a:text, '\v^\s*(?:AS\s+)?([A-Za-z_]\w*)', l:pos)
     if !empty(l:alias_m)
       let l:alias = l:alias_m[1]
-      if l:alias !=# l:table && !has_key(s:non_alias_kw, tolower(l:alias))
+      if l:alias !=# l:table && !has_key(s:load_non_alias_keywords(), tolower(l:alias))
         let l:aliases[tolower(l:alias)] = l:table
         let l:pos = matchend(a:text, '\v^\s*(?:AS\s+)?([A-Za-z_]\w*)', l:pos)
       endif
@@ -275,7 +284,7 @@ function! s:detect_context() abort
   
   " Check table context
   let l:text = s:get_context_text()
-  for l:kw in s:TABLE_KEYWORDS
+  for l:kw in s:load_table_keywords()
     let l:pat = '\v\c' . substitute(l:kw, '_', '\\s\\+', 'g') . '\s+([A-Za-z_][A-Za-z0-9_]*)?$'
     if l:text =~# l:pat
       let l:m = matchlist(l:before, '\v([A-Za-z_][A-Za-z0-9_]*)$')

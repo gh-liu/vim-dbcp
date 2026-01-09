@@ -1,0 +1,14 @@
+content,description,type
+FROM,FROM clause,table_keyword
+JOIN,JOIN clause,table_keyword
+INNER JOIN,INNER JOIN clause,table_keyword
+LEFT JOIN,LEFT JOIN clause,table_keyword
+RIGHT JOIN,RIGHT JOIN clause,table_keyword
+FULL JOIN,FULL JOIN clause,table_keyword
+CROSS JOIN,CROSS JOIN clause,table_keyword
+LEFT OUTER JOIN,LEFT OUTER JOIN clause,table_keyword
+RIGHT OUTER JOIN,RIGHT OUTER JOIN clause,table_keyword
+FULL OUTER JOIN,FULL OUTER JOIN clause,table_keyword
+UPDATE,UPDATE statement,table_keyword
+INTO,INSERT INTO clause,table_keyword
+TABLE,CREATE TABLE,table_keyword

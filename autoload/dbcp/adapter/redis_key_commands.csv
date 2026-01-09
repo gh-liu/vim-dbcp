@@ -1,0 +1,42 @@
+content,description,type
+GET,Get value,key_command
+SET,Set value,key_command
+DEL,Delete keys,key_command
+EXISTS,Check key exists,key_command
+EXPIRE,Set expiration,key_command
+TTL,Get TTL,key_command
+TYPE,Get value type,key_command
+MGET,Get multiple values,key_command
+MSET,Set multiple keys,key_command
+INCR,Increment,key_command
+DECR,Decrement,key_command
+COPY,Copy key,key_command
+MOVE,Move key,key_command
+RENAME,Rename key,key_command
+RENAMENX,Rename if not exists,key_command
+HGET,Get hash field,key_command
+HSET,Set hash field,key_command
+HDEL,Delete hash fields,key_command
+HGETALL,Get all hash fields,key_command
+LPUSH,Push to list head,key_command
+RPUSH,Push to list tail,key_command
+LPOP,Pop from list head,key_command
+RPOP,Pop from list tail,key_command
+LLEN,Get list length,key_command
+SADD,Add set member,key_command
+SMEMBERS,Get all set members,key_command
+SISMEMBER,Check set membership,key_command
+ZADD,Add sorted set member,key_command
+ZRANGE,Get range by rank,key_command
+WATCH,Watch keys,key_command
+SORT,Sort elements,key_command
+BITCOUNT,Count bits,key_command
+BITOP,Bitwise operations,key_command
+GEOADD,Add geospatial,key_command
+GEORADIUS,Query by radius,key_command
+XADD,Add to stream,key_command
+XRANGE,Get stream range,key_command
+XREAD,Read from stream,key_command
+PFADD,Add to HyperLogLog,key_command
+PFCOUNT,Count unique,key_command
+PFMERGE,Merge HyperLogLogs,key_command

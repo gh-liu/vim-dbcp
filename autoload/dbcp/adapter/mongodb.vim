@@ -260,33 +260,19 @@ endfunction
 " Data Definitions
 " =============================================================================
 
+let s:script_path = expand('<sfile>:p')
+
 " =============================================================================
 " DB Methods
 " =============================================================================
 
-let s:db_methods_raw = [
-      \ ['adminCommand',       '(cmd)',                   'run admin command'],
-      \ ['aggregate',          '([pipeline], <opts>)',    'db-level aggregation'],
-      \ ['createCollection',   '(name, <opts>)',          'create collection'],
-      \ ['createView',         '(name, source, pipeline)'],
-      \ ['dropDatabase',       '()',                      'drop current database'],
-      \ ['getCollection',      '(name)',                  'get collection object'],
-      \ ['getCollectionNames', '()',                      'list collection names'],
-      \ ['getMongo',           '()',                      'get Mongo connection'],
-      \ ['getName',            '()',                      'get database name'],
-      \ ['getSiblingDB',       '(name)',                  'get another database'],
-      \ ['listCommands',       '()'],
-      \ ['runCommand',         '(cmd)',                   'run database command'],
-      \ ['stats',              '(<opts>)',                'database statistics'],
-      \ ['version',            '()',                      'server version'],
-      \]
-
 let s:db_methods = v:null
 
 function! s:get_db_methods() abort
-  if s:db_methods is v:null
-    let s:db_methods = s:make_items(s:db_methods_raw)
-  endif
+  if s:db_methods isnot v:null | return s:db_methods | endif
+  let l:csv = dbcp#csv#load('mongodb_db_methods.csv', s:script_path)
+  let l:raw = l:csv is v:null ? [] : map(l:csv, {_, v -> [v[0], '', v[1]]})
+  let s:db_methods = s:make_items(l:raw)
   return s:db_methods
 endfunction
 
@@ -294,40 +280,13 @@ endfunction
 " Collection Methods
 " =============================================================================
 
-let s:coll_methods_raw = [
-      \ ['aggregate',              '([pipeline], <opts>)',                       'aggregation pipeline'],
-      \ ['bulkWrite',              '(operations, <opts>)',                       'bulk write operations'],
-      \ ['countDocuments',         '(query={}, <opts>)',                         'count matching documents'],
-      \ ['createIndex',            '(keypattern, [opts])'],
-      \ ['createIndexes',          '([keypatterns], <opts>)'],
-      \ ['deleteMany',             '(filter, <opts>)',                           'delete all matching'],
-      \ ['deleteOne',              '(filter, <opts>)',                           'delete first matching'],
-      \ ['distinct',               '(key, query, <opts>)',                       'distinct values for field'],
-      \ ['drop',                   '()',                                         'drop collection'],
-      \ ['dropIndex',              '(index)'],
-      \ ['dropIndexes',            '()'],
-      \ ['estimatedDocumentCount', '(<opts>)',                                   'fast count via metadata'],
-      \ ['find',                   '([query], [fields])',                        'query documents'],
-      \ ['findOne',                '([query], [fields], [opts])'],
-      \ ['findOneAndDelete',       '(filter, <opts>)'],
-      \ ['findOneAndReplace',      '(filter, replacement, <opts>)'],
-      \ ['findOneAndUpdate',       '(filter, <update>, <opts>)'],
-      \ ['getIndexes',             '()'],
-      \ ['insertMany',             '([objects], <opts>)'],
-      \ ['insertOne',              '(obj, <opts>)'],
-      \ ['renameCollection',       '(newName, <dropTarget>)'],
-      \ ['replaceOne',             '(filter, replacement, <opts>)'],
-      \ ['stats',                  '(<opts>)',                                   'collection statistics'],
-      \ ['updateMany',             '(filter, <update>, <opts>)'],
-      \ ['updateOne',              '(filter, <update>, <opts>)'],
-      \]
-
 let s:coll_methods = v:null
 
 function! s:get_coll_methods() abort
-  if s:coll_methods is v:null
-    let s:coll_methods = s:make_items(s:coll_methods_raw)
-  endif
+  if s:coll_methods isnot v:null | return s:coll_methods | endif
+  let l:csv = dbcp#csv#load('mongodb_coll_methods.csv', s:script_path)
+  let l:raw = l:csv is v:null ? [] : map(l:csv, {_, v -> [v[0], '', v[1]]})
+  let s:coll_methods = s:make_items(l:raw)
   return s:coll_methods
 endfunction
 
@@ -335,35 +294,13 @@ endfunction
 " Chain Methods (cursor methods after find(), findOne(), etc.)
 " =============================================================================
 
-let s:chain_methods_raw = [
-      \ ['explain',           '(<verbosity>)',                    'explain query execution'],
-      \ ['toArray',          '()',                              'convert cursor to array'],
-      \ ['forEach',          '(callback)',                       'iterate over cursor'],
-      \ ['hasNext',          '()',                              'check if more documents'],
-      \ ['next',             '()',                              'get next document'],
-      \ ['limit',             '(n)',                              'limit number of results'],
-      \ ['skip',             '(n)',                              'skip number of results'],
-      \ ['sort',             '(sortOrder)',                      'sort results'],
-      \ ['project',          '(projection)',                    'project fields'],
-      \ ['count',             '()',                              'count documents'],
-      \ ['map',              '(callback)',                      'map over cursor'],
-      \ ['filter',           '(callback)',                      'filter cursor'],
-      \ ['batchSize',        '(size)',                          'set batch size'],
-      \ ['maxTimeMS',        '(ms)',                            'set max time'],
-      \ ['hint',             '(index)',                        'use index hint'],
-      \ ['max',              '(max)',                           'max value'],
-      \ ['min',              '(min)',                           'min value'],
-      \ ['readPref',         '(mode, tagSet)',                  'read preference'],
-      \ ['readConcern',      '(level)',                         'read concern'],
-      \ ['collation',        '(collation)',                     'collation'],
-      \]
-
 let s:chain_methods = v:null
 
 function! s:get_chain_methods() abort
-  if s:chain_methods is v:null
-    let s:chain_methods = s:make_items(s:chain_methods_raw)
-  endif
+  if s:chain_methods isnot v:null | return s:chain_methods | endif
+  let l:csv = dbcp#csv#load('mongodb_chain_methods.csv', s:script_path)
+  let l:raw = l:csv is v:null ? [] : map(l:csv, {_, v -> [v[0], '', v[1]]})
+  let s:chain_methods = s:make_items(l:raw)
   return s:chain_methods
 endfunction
 
@@ -371,67 +308,13 @@ endfunction
 " Operators
 " =============================================================================
 
-let s:operators_raw = [
-      \ ['$eq',         'equal'],
-      \ ['$ne',         'not equal'],
-      \ ['$gt',         'greater than'],
-      \ ['$gte',        'greater than or equal'],
-      \ ['$lt',         'less than'],
-      \ ['$lte',        'less than or equal'],
-      \ ['$in',         'in array'],
-      \ ['$nin',        'not in array'],
-      \ ['$exists',     'field exists'],
-      \ ['$type',       'field type'],
-      \ ['$regex',      'regex match'],
-      \ ['$expr',       'aggregation expression'],
-      \ ['$and',        'logical AND'],
-      \ ['$or',         'logical OR'],
-      \ ['$not',        'logical NOT'],
-      \ ['$nor',        'logical NOR'],
-      \ ['$elemMatch',  'array element match'],
-      \ ['$all',        'array contains all'],
-      \ ['$size',       'array size'],
-      \ ['$set',        'set field value',          'update'],
-      \ ['$unset',      'remove field',             'update'],
-      \ ['$inc',        'increment value',          'update'],
-      \ ['$push',       'push to array',            'update'],
-      \ ['$pull',       'pull from array',          'update'],
-      \ ['$addToSet',   'add unique to array',      'update'],
-      \ ['$pop',        'pop from array',           'update'],
-      \ ['$rename',     'rename field',             'update'],
-      \ ['$min',        'update if less',           'update'],
-      \ ['$max',        'update if greater',        'update'],
-      \ ['$mul',        'multiply value',           'update'],
-      \ ['$match',      'filter documents',         'aggregation'],
-      \ ['$group',      'group by field',           'aggregation'],
-      \ ['$project',    'reshape documents',        'aggregation'],
-      \ ['$sort',       'sort documents',           'aggregation'],
-      \ ['$limit',      'limit results',            'aggregation'],
-      \ ['$skip',       'skip documents',           'aggregation'],
-      \ ['$unwind',     'deconstruct array',        'aggregation'],
-      \ ['$lookup',     'join collections',         'aggregation'],
-      \ ['$addFields',  'add computed fields',      'aggregation'],
-      \ ['$count',      'count documents',          'aggregation'],
-      \ ['$facet',      'multiple pipelines',       'aggregation'],
-      \ ['$bucket',     'categorize into buckets',  'aggregation'],
-      \ ['$merge',      'merge into collection',    'aggregation'],
-      \ ['$out',        'output to collection',     'aggregation'],
-      \ ['$replaceRoot','replace root document',    'aggregation'],
-      \ ['$sample',     'random sample',            'aggregation'],
-      \ ['$unionWith',  'union with collection',    'aggregation'],
-      \]
-
 let s:operators = v:null
 
 function! s:get_operators() abort
-  if s:operators is v:null
-    " Reuse make_items logic but adapt for operators (no parentheses)
-    let s:operators = map(copy(s:operators_raw), {_, v -> {
-          \ 'word': v[0],
-          \ 'menu': v[1],
-          \ 'info': get(v, 2, ' ')
-          \ }})
-  endif
+  if s:operators isnot v:null | return s:operators | endif
+  let l:csv = dbcp#csv#load('mongodb_operators.csv', s:script_path)
+  let l:raw = l:csv is v:null ? [] : map(l:csv, {_, v -> [v[0], v[1], get(v, 2, '')]})
+  let s:operators = map(copy(l:raw), {_, v -> {'word': v[0], 'menu': v[1], 'info': get(v, 2, ' ')}})
   return s:operators
 endfunction
 

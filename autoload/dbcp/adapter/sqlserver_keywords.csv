@@ -1,0 +1,186 @@
+content,description,type
+ADD,ADD clause,keyword
+ALL,ALL modifier,keyword
+ALTER,ALTER statement,keyword
+AND,AND operator,keyword
+ANY,ANY operator,keyword
+AS,AS alias,keyword
+ASC,ASC order,keyword
+AUTHORIZATION,AUTHORIZATION,keyword
+BACKUP,BACKUP statement,keyword
+BEGIN,BEGIN transaction,keyword
+BETWEEN,BETWEEN operator,keyword
+BREAK,BREAK statement,keyword
+BROWSE,BROWSE modifier,keyword
+BULK,BULK insert,keyword
+BY,ORDER BY / GROUP BY,keyword
+CASCADE,CASCADE modifier,keyword
+CASE,CASE expression,keyword
+CHECK,CHECK constraint,keyword
+CHECKPOINT,CHECKPOINT statement,keyword
+CLOSE,CLOSE cursor,keyword
+CLUSTERED,CLUSTERED index,keyword
+COALESCE,COALESCE function,keyword
+COLLATE,COLLATE clause,keyword
+COLUMN,COLUMN,keyword
+COMMIT,COMMIT transaction,keyword
+COMPUTE,COMPUTE clause,keyword
+CONSTRAINT,CONSTRAINT,keyword
+CONTAINS,CONTAINS function,keyword
+CONTAINSTABLE,CONTAINSTABLE function,keyword
+CONTINUE,CONTINUE statement,keyword
+CONVERT,CONVERT function,keyword
+CREATE,CREATE statement,keyword
+CROSS,CROSS join,keyword
+CURRENT,CURRENT,keyword
+CURRENT_DATE,CURRENT_DATE,keyword
+CURRENT_TIME,CURRENT_TIME,keyword
+CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,keyword
+CURRENT_USER,CURRENT_USER,keyword
+CURSOR,CURSOR,keyword
+DATABASE,DATABASE,keyword
+DBCC,DBCC statement,keyword
+DEALLOCATE,DEALLOCATE statement,keyword
+DECLARE,DECLARE statement,keyword
+DEFAULT,DEFAULT value,keyword
+DELETE,DELETE statement,keyword
+DENY,DENY statement,keyword
+DESC,DESC order,keyword
+DISK,DISK,keyword
+DISTINCT,DISTINCT modifier,keyword
+DISTRIBUTED,DISTRIBUTED transaction,keyword
+DOUBLE,DOUBLE type,keyword
+DROP,DROP statement,keyword
+DUMP,DUMP statement,keyword
+ELSE,ELSE clause,keyword
+END,END statement,keyword
+ERRLVL,ERRLVL,keyword
+ESCAPE,ESCAPE clause,keyword
+EXCEPT,EXCEPT operator,keyword
+EXEC,EXEC statement,keyword
+EXECUTE,EXECUTE statement,keyword
+EXISTS,EXISTS operator,keyword
+EXIT,EXIT statement,keyword
+EXTERNAL,EXTERNAL table,keyword
+FETCH,FETCH statement,keyword
+FILE,FILE,keyword
+FILLFACTOR,FILLFACTOR,keyword
+FOR,FOR clause,keyword
+FOREIGN,FOREIGN key,keyword
+FREETEXT,FREETEXT function,keyword
+FREETEXTTABLE,FREETEXTTABLE function,keyword
+FROM,FROM clause,keyword
+FULL,FULL join,keyword
+FUNCTION,FUNCTION,keyword
+GOTO,GOTO statement,keyword
+GRANT,GRANT statement,keyword
+GROUP,GROUP BY,keyword
+HAVING,HAVING clause,keyword
+HOLDLOCK,HOLDLOCK hint,keyword
+IDENTITY,IDENTITY column,keyword
+IDENTITYCOL,IDENTITYCOL,keyword
+IDENTITY_INSERT,IDENTITY_INSERT,keyword
+IF,IF statement,keyword
+IN,IN operator,keyword
+INDEX,INDEX,keyword
+INNER,INNER join,keyword
+INSERT,INSERT statement,keyword
+INTERSECT,INTERSECT operator,keyword
+INTO,INSERT INTO,keyword
+IS,IS operator,keyword
+JOIN,JOIN clause,keyword
+KEY,KEY,keyword
+KILL,KILL statement,keyword
+LEFT,LEFT join,keyword
+LIKE,LIKE operator,keyword
+LINENO,LINENO,keyword
+LOAD,LOAD statement,keyword
+MERGE,MERGE statement,keyword
+NATIONAL,NATIONAL type,keyword
+NOCHECK,NOCHECK modifier,keyword
+NONCLUSTERED,NONCLUSTERED index,keyword
+NOT,NOT operator,keyword
+NULL,NULL value,keyword
+NULLIF,NULLIF function,keyword
+OF,OF clause,keyword
+OFF,OFF modifier,keyword
+OFFSETS,OFFSETS,keyword
+ON,ON condition,keyword
+OPEN,OPEN cursor,keyword
+OPENDATASOURCE,OPENDATASOURCE function,keyword
+OPENQUERY,OPENQUERY function,keyword
+OPENROWSET,OPENROWSET function,keyword
+OPENXML,OPENXML function,keyword
+OPTION,OPTION clause,keyword
+OR,OR operator,keyword
+ORDER,ORDER BY,keyword
+OUTER,OUTER join,keyword
+OVER,OVER clause,keyword
+PERCENT,PERCENT modifier,keyword
+PIVOT,PIVOT operator,keyword
+PLAN,PLAN,keyword
+PRECISION,PRECISION,keyword
+PRIMARY,PRIMARY key,keyword
+PRINT,PRINT statement,keyword
+PROC,PROC procedure,keyword
+PROCEDURE,PROCEDURE,keyword
+PUBLIC,PUBLIC role,keyword
+RAISERROR,RAISERROR statement,keyword
+READ,READ lock,keyword
+READTEXT,READTEXT statement,keyword
+RECONFIGURE,RECONFIGURE statement,keyword
+REFERENCES,REFERENCES,keyword
+REPLICATION,REPLICATION,keyword
+RESTORE,RESTORE statement,keyword
+RESTRICT,RESTRICT modifier,keyword
+RETURN,RETURN statement,keyword
+REVERT,REVERT statement,keyword
+REVOKE,REVOKE statement,keyword
+RIGHT,RIGHT join,keyword
+ROLLBACK,ROLLBACK transaction,keyword
+ROWCOUNT,ROWCOUNT,keyword
+ROWGUIDCOL,ROWGUIDCOL,keyword
+RULE,RULE,keyword
+SAVE,SAVE transaction,keyword
+SCHEMA,SCHEMA,keyword
+SECURITYAUDIT,SECURITYAUDIT,keyword
+SELECT,SELECT statement,keyword
+SEMANTICKEYPHRASETABLE,SEMANTICKEYPHRASETABLE function,keyword
+SEMANTICSIMILARITYDETAILSTABLE,SEMANTICSIMILARITYDETAILSTABLE function,keyword
+SEMANTICSIMILARITYTABLE,SEMANTICSIMILARITYTABLE function,keyword
+SESSION_USER,SESSION_USER,keyword
+SET,SET clause,keyword
+SETUSER,SETUSER statement,keyword
+SHUTDOWN,SHUTDOWN statement,keyword
+SOME,SOME operator,keyword
+STATISTICS,STATISTICS,keyword
+SYSTEM_USER,SYSTEM_USER,keyword
+TABLE,CREATE TABLE,keyword
+TABLESAMPLE,TABLESAMPLE clause,keyword
+TEXTSIZE,TEXTSIZE,keyword
+THEN,THEN clause,keyword
+TO,TO clause,keyword
+TOP,TOP modifier,keyword
+TRAN,TRAN transaction,keyword
+TRANSACTION,TRANSACTION,keyword
+TRIGGER,TRIGGER,keyword
+TRUNCATE,TRUNCATE statement,keyword
+TRY_CONVERT,TRY_CONVERT function,keyword
+TSEQUAL,TSEQUAL function,keyword
+UNION,UNION operator,keyword
+UNIQUE,UNIQUE constraint,keyword
+UNPIVOT,UNPIVOT operator,keyword
+UPDATE,UPDATE statement,keyword
+UPDATETEXT,UPDATETEXT statement,keyword
+USE,USE statement,keyword
+USER,USER,keyword
+VALUES,VALUES clause,keyword
+VARYING,VARYING modifier,keyword
+VIEW,VIEW,keyword
+WAITFOR,WAITFOR statement,keyword
+WHEN,WHEN clause,keyword
+WHERE,WHERE clause,keyword
+WHILE,WHILE statement,keyword
+WITH,WITH clause,keyword
+WITHIN,WITHIN clause,keyword
+WRITETEXT,WRITETEXT statement,keyword

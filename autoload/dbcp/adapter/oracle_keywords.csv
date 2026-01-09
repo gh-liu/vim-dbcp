@@ -1,0 +1,111 @@
+content,description,type
+ACCESS,ACCESS privilege,keyword
+ADD,ADD clause,keyword
+ALL,ALL modifier,keyword
+ALTER,ALTER statement,keyword
+AND,AND operator,keyword
+ANY,ANY operator,keyword
+AS,AS alias,keyword
+ASC,ASC order,keyword
+AUDIT,AUDIT statement,keyword
+BETWEEN,BETWEEN operator,keyword
+BY,ORDER BY / GROUP BY,keyword
+CHAR,CHAR type,keyword
+CHECK,CHECK constraint,keyword
+CLUSTER,CLUSTER,keyword
+COLUMN,COLUMN,keyword
+COLUMN_VALUE,COLUMN_VALUE,keyword
+COMMENT,COMMENT statement,keyword
+COMPRESS,COMPRESS modifier,keyword
+CONNECT,CONNECT privilege,keyword
+CREATE,CREATE statement,keyword
+CURRENT,CURRENT,keyword
+DATE,DATE type,keyword
+DECIMAL,DECIMAL type,keyword
+DEFAULT,DEFAULT value,keyword
+DELETE,DELETE statement,keyword
+DESC,DESC order,keyword
+DISTINCT,DISTINCT modifier,keyword
+DROP,DROP statement,keyword
+ELSE,ELSE clause,keyword
+EXCLUSIVE,EXCLUSIVE lock,keyword
+EXISTS,EXISTS operator,keyword
+FILE,FILE,keyword
+FLOAT,FLOAT type,keyword
+FOR,FOR clause,keyword
+FROM,FROM clause,keyword
+GRANT,GRANT statement,keyword
+GROUP,GROUP BY,keyword
+HAVING,HAVING clause,keyword
+IDENTIFIED,IDENTIFIED,keyword
+IMMEDIATE,IMMEDIATE constraint,keyword
+IN,IN operator,keyword
+INCREMENT,INCREMENT,keyword
+INDEX,INDEX,keyword
+INITIAL,INITIAL,keyword
+INSERT,INSERT statement,keyword
+INTEGER,INTEGER type,keyword
+INTERSECT,INTERSECT operator,keyword
+INTO,INSERT INTO,keyword
+IS,IS operator,keyword
+LEVEL,LEVEL,keyword
+LIKE,LIKE operator,keyword
+LOCK,LOCK statement,keyword
+LONG,LONG type,keyword
+MAXEXTENTS,MAXEXTENTS,keyword
+MINUS,MINUS operator,keyword
+MLSLABEL,MLSLABEL,keyword
+MODE,MODE,keyword
+MODIFY,MODIFY clause,keyword
+NESTED_TABLE_ID,NESTED_TABLE_ID,keyword
+NOAUDIT,NOAUDIT statement,keyword
+NOCOMPRESS,NOCOMPRESS modifier,keyword
+NOT,NOT operator,keyword
+NOWAIT,NOWAIT modifier,keyword
+NULL,NULL value,keyword
+NUMBER,NUMBER type,keyword
+OF,OF clause,keyword
+OFFLINE,OFFLINE modifier,keyword
+ON,ON condition,keyword
+ONLINE,ONLINE modifier,keyword
+OPTION,OPTION clause,keyword
+OR,OR operator,keyword
+ORDER,ORDER BY,keyword
+PCTFREE,PCTFREE,keyword
+PRIOR,PRIOR,keyword
+PUBLIC,PUBLIC role,keyword
+RAW,RAW type,keyword
+RENAME,RENAME statement,keyword
+RESOURCE,RESOURCE privilege,keyword
+REVOKE,REVOKE statement,keyword
+ROW,ROW type,keyword
+ROWID,ROWID,keyword
+ROWNUM,ROWNUM,keyword
+ROWS,ROWS clause,keyword
+SELECT,SELECT statement,keyword
+SESSION,SESSION,keyword
+SET,SET clause,keyword
+SHARE,SHARE lock,keyword
+SIZE,SIZE,keyword
+SMALLINT,SMALLINT type,keyword
+START,START,keyword
+SUCCESSFUL,SUCCESSFUL modifier,keyword
+SYNONYM,SYNONYM,keyword
+SYSDATE,SYSDATE,keyword
+TABLE,CREATE TABLE,keyword
+THEN,THEN clause,keyword
+TO,TO clause,keyword
+TRIGGER,TRIGGER,keyword
+UID,UID,keyword
+UNION,UNION operator,keyword
+UNIQUE,UNIQUE constraint,keyword
+UPDATE,UPDATE statement,keyword
+USER,USER,keyword
+VALIDATE,VALIDATE,keyword
+VALUES,VALUES clause,keyword
+VARCHAR,VARCHAR type,keyword
+VARCHAR2,VARCHAR2 type,keyword
+VIEW,VIEW,keyword
+WHENEVER,WHENEVER clause,keyword
+WHERE,WHERE clause,keyword
+WITH,WITH clause,keyword

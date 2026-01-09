@@ -1,0 +1,26 @@
+content,description,type
+aggregate,aggregation pipeline,coll_method
+bulkWrite,bulk write operations,coll_method
+countDocuments,count matching documents,coll_method
+createIndex,create index,coll_method
+createIndexes,create indexes,coll_method
+deleteMany,delete all matching,coll_method
+deleteOne,delete first matching,coll_method
+distinct,distinct values for field,coll_method
+drop,drop collection,coll_method
+dropIndex,drop index,coll_method
+dropIndexes,drop indexes,coll_method
+estimatedDocumentCount,fast count via metadata,coll_method
+find,query documents,coll_method
+findOne,find one document,coll_method
+findOneAndDelete,find one and delete,coll_method
+findOneAndReplace,find one and replace,coll_method
+findOneAndUpdate,find one and update,coll_method
+getIndexes,get indexes,coll_method
+insertMany,insert many documents,coll_method
+insertOne,insert one document,coll_method
+renameCollection,rename collection,coll_method
+replaceOne,replace one document,coll_method
+stats,collection statistics,coll_method
+updateMany,update many documents,coll_method
+updateOne,update one document,coll_method

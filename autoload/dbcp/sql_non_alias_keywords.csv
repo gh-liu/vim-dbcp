@@ -1,0 +1,22 @@
+content,description,type
+where,WHERE clause,non_alias_keyword
+on,ON condition,non_alias_keyword
+and,AND operator,non_alias_keyword
+or,OR operator,non_alias_keyword
+set,SET clause,non_alias_keyword
+values,VALUES clause,non_alias_keyword
+left,LEFT join,non_alias_keyword
+right,RIGHT join,non_alias_keyword
+inner,INNER join,non_alias_keyword
+outer,OUTER join,non_alias_keyword
+cross,CROSS join,non_alias_keyword
+full,FULL join,non_alias_keyword
+natural,NATURAL join,non_alias_keyword
+order,ORDER BY,non_alias_keyword
+group,GROUP BY,non_alias_keyword
+having,HAVING clause,non_alias_keyword
+limit,LIMIT clause,non_alias_keyword
+offset,OFFSET clause,non_alias_keyword
+union,UNION operator,non_alias_keyword
+except,EXCEPT operator,non_alias_keyword
+intersect,INTERSECT operator,non_alias_keyword

@@ -1,0 +1,144 @@
+content,description,type
+ABORT,ABORT statement,keyword
+ACTION,ACTION,keyword
+ADD,ADD clause,keyword
+AFTER,AFTER trigger,keyword
+ALL,ALL modifier,keyword
+ALTER,ALTER statement,keyword
+ANALYZE,ANALYZE statement,keyword
+AND,AND operator,keyword
+AS,AS alias,keyword
+ASC,ASC order,keyword
+ATTACH,ATTACH database,keyword
+AUTOINCREMENT,AUTOINCREMENT,keyword
+BEFORE,BEFORE trigger,keyword
+BEGIN,BEGIN transaction,keyword
+BETWEEN,BETWEEN operator,keyword
+BY,ORDER BY / GROUP BY,keyword
+CASCADE,CASCADE modifier,keyword
+CASE,CASE expression,keyword
+CAST,CAST function,keyword
+CHECK,CHECK constraint,keyword
+COLLATE,COLLATE clause,keyword
+COLUMN,COLUMN,keyword
+COMMIT,COMMIT transaction,keyword
+CONFLICT,CONFLICT clause,keyword
+CONSTRAINT,CONSTRAINT,keyword
+CREATE,CREATE statement,keyword
+CROSS,CROSS join,keyword
+CURRENT,CURRENT,keyword
+CURRENT_DATE,CURRENT_DATE,keyword
+CURRENT_TIME,CURRENT_TIME,keyword
+CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,keyword
+DATABASE,DATABASE,keyword
+DEFAULT,DEFAULT value,keyword
+DEFERRABLE,DEFERRABLE constraint,keyword
+DEFERRED,DEFERRED constraint,keyword
+DELETE,DELETE statement,keyword
+DESC,DESC order,keyword
+DETACH,DETACH database,keyword
+DISTINCT,DISTINCT modifier,keyword
+DO,DO statement,keyword
+DROP,DROP statement,keyword
+EACH,EACH modifier,keyword
+ELSE,ELSE clause,keyword
+END,END statement,keyword
+ESCAPE,ESCAPE clause,keyword
+EXCEPT,EXCEPT operator,keyword
+EXCLUDE,EXCLUDE clause,keyword
+EXCLUSIVE,EXCLUSIVE lock,keyword
+EXISTS,EXISTS operator,keyword
+EXPLAIN,EXPLAIN statement,keyword
+FAIL,FAIL action,keyword
+FILTER,FILTER clause,keyword
+FIRST,FIRST modifier,keyword
+FOLLOWING,FOLLOWING modifier,keyword
+FOR,FOR clause,keyword
+FOREIGN,FOREIGN key,keyword
+FROM,FROM clause,keyword
+FULL,FULL join,keyword
+GLOB,GLOB operator,keyword
+GROUP,GROUP BY,keyword
+GROUPS,GROUPS modifier,keyword
+HAVING,HAVING clause,keyword
+IF,IF statement,keyword
+IGNORE,IGNORE modifier,keyword
+IMMEDIATE,IMMEDIATE constraint,keyword
+IN,IN operator,keyword
+INDEX,INDEX,keyword
+INDEXED,INDEXED clause,keyword
+INITIALLY,INITIALLY modifier,keyword
+INNER,INNER join,keyword
+INSERT,INSERT statement,keyword
+INSTEAD,INSTEAD trigger,keyword
+INTERSECT,INTERSECT operator,keyword
+INTO,INSERT INTO,keyword
+IS,IS operator,keyword
+ISNULL,ISNULL function,keyword
+JOIN,JOIN clause,keyword
+KEY,KEY,keyword
+LAST,LAST modifier,keyword
+LEFT,LEFT join,keyword
+LIKE,LIKE operator,keyword
+LIMIT,LIMIT clause,keyword
+MATCH,MATCH function,keyword
+NATURAL,NATURAL join,keyword
+NO,NO modifier,keyword
+NOT,NOT operator,keyword
+NOTHING,NOTHING,keyword
+NOTNULL,NOTNULL function,keyword
+NULL,NULL value,keyword
+NULLS,NULLS modifier,keyword
+OF,OF clause,keyword
+OFFSET,OFFSET clause,keyword
+ON,ON condition,keyword
+OR,OR operator,keyword
+ORDER,ORDER BY,keyword
+OTHERS,OTHERS modifier,keyword
+OUTER,OUTER join,keyword
+OVER,OVER clause,keyword
+PARTITION,PARTITION,keyword
+PLAN,PLAN statement,keyword
+PRAGMA,PRAGMA statement,keyword
+PRECEDING,PRECEDING modifier,keyword
+PRIMARY,PRIMARY key,keyword
+QUERY,QUERY plan,keyword
+RAISE,RAISE function,keyword
+RANGE,RANGE partition,keyword
+RECURSIVE,RECURSIVE CTE,keyword
+REFERENCES,REFERENCES,keyword
+REGEXP,REGEXP operator,keyword
+REINDEX,REINDEX statement,keyword
+RELEASE,RELEASE statement,keyword
+RENAME,RENAME statement,keyword
+REPLACE,REPLACE statement,keyword
+RESTRICT,RESTRICT modifier,keyword
+RIGHT,RIGHT join,keyword
+ROLLBACK,ROLLBACK transaction,keyword
+ROW,ROW type,keyword
+ROWS,ROWS clause,keyword
+SAVEPOINT,SAVEPOINT,keyword
+SELECT,SELECT statement,keyword
+SET,SET clause,keyword
+TABLE,CREATE TABLE,keyword
+TEMP,TEMP modifier,keyword
+TEMPORARY,TEMPORARY modifier,keyword
+THEN,THEN clause,keyword
+TIES,TIES modifier,keyword
+TO,TO clause,keyword
+TRANSACTION,TRANSACTION,keyword
+TRIGGER,TRIGGER,keyword
+UNBOUNDED,UNBOUNDED modifier,keyword
+UNION,UNION operator,keyword
+UNIQUE,UNIQUE constraint,keyword
+UPDATE,UPDATE statement,keyword
+USING,USING clause,keyword
+VACUUM,VACUUM statement,keyword
+VALUES,VALUES clause,keyword
+VIEW,VIEW,keyword
+VIRTUAL,VIRTUAL table,keyword
+WHEN,WHEN clause,keyword
+WHERE,WHERE clause,keyword
+WINDOW,WINDOW function,keyword
+WITH,WITH clause,keyword
+WITHOUT,WITHOUT ROWID,keyword
