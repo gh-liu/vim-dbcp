@@ -234,7 +234,7 @@ function! s:get_context_text() abort
   for l:i in range(max([1, l:ln - 20]), l:ln - 1)
     call add(l:lines, getline(l:i))
   endfor
-  call add(l:lines, getline(l:ln)[:l:col - 2])
+  call add(l:lines, getline(l:ln)[:l:col - 1])
   let s:ctx_cache.text = join(l:lines, ' ')
   let s:ctx_cache.line = l:ln
   let s:ctx_cache.col = l:col
@@ -242,32 +242,57 @@ function! s:get_context_text() abort
 endfunction
 
 function! s:extract_aliases(text) abort
-  if s:ctx_cache.text ==# a:text && !empty(s:ctx_cache.aliases)
-    return s:ctx_cache.aliases
-  endif
-  let l:aliases = {}
-  let l:pos = 0
-  " Match: FROM/JOIN table [AS] alias
-  while 1
-    let l:m = matchlist(a:text, '\v\c(FROM|JOIN)\s+([A-Za-z_]\w*)', l:pos)
-    if empty(l:m) | break | endif
-    let l:table = l:m[2]
-    let l:tl = tolower(l:table)
-    if !has_key(l:aliases, l:tl) | let l:aliases[l:tl] = l:table | endif
-    let l:pos = matchend(a:text, '\v\c(FROM|JOIN)\s+([A-Za-z_]\w*)', l:pos)
-    " Check for alias after table
-    let l:alias_m = matchlist(a:text, '\v^\s*(?:AS\s+)?([A-Za-z_]\w*)', l:pos)
-    if !empty(l:alias_m)
-      let l:alias = l:alias_m[1]
-      if l:alias !=# l:table && !has_key(s:load_non_alias_keywords(), tolower(l:alias))
-        let l:aliases[tolower(l:alias)] = l:table
-        let l:pos = matchend(a:text, '\v^\s*(?:AS\s+)?([A-Za-z_]\w*)', l:pos)
-      endif
+  try
+    if s:ctx_cache.text ==# a:text && !empty(s:ctx_cache.aliases)
+      return s:ctx_cache.aliases
     endif
-    if l:pos == -1 | break | endif
-  endwhile
-  if s:ctx_cache.text ==# a:text | let s:ctx_cache.aliases = l:aliases | endif
-  return l:aliases
+    let l:aliases = {}
+    let l:pos = 0
+    " Match: FROM/JOIN table [AS] alias
+    while 1
+      let l:m = matchlist(a:text, '\v\c(FROM|JOIN)\s+([A-Za-z_]\w+)', l:pos)
+      if empty(l:m) | break | endif
+      let l:table = l:m[2]
+      let l:tl = tolower(l:table)
+      if !has_key(l:aliases, l:tl) | let l:aliases[l:tl] = l:table | endif
+      let l:pos = matchend(a:text, '\v\c(FROM|JOIN)\s+([A-Za-z_]\w+)', l:pos)
+      " Look for alias after table (either "AS alias" or just "alias")
+      let l:rest = strpart(a:text, l:pos)
+      let l:parts = split(l:rest)
+      if len(l:parts) > 0
+        let l:alias = l:parts[0]
+        if l:alias ==# 'AS' && len(l:parts) > 1
+          let l:alias = l:parts[1]
+        endif
+        if !empty(l:alias)
+          let l:alias_lower = tolower(l:alias)
+          let l:is_reserved = 0
+          let l:non_alias_kw = {}
+          let l:csv = dbcp#csv#load('sql_non_alias_keywords.csv', s:script_path)
+          if type(l:csv) == v:t_list
+            for l:row in l:csv
+              if type(l:row) == v:t_list && len(l:row) > 0
+                let l:kw = l:row[0]
+                let l:non_alias_kw[tolower(l:kw)] = 1
+              endif
+            endfor
+          endif
+          if has_key(l:non_alias_kw, l:alias_lower)
+            let l:is_reserved = 1
+          endif
+          if l:alias !=# l:table && !l:is_reserved
+            let l:aliases[l:alias_lower] = l:table
+          endif
+          let l:pos += strlen(l:parts[0]) + 1
+        endif
+      endif
+      if l:pos >= len(a:text) | break | endif
+    endwhile
+    if s:ctx_cache.text ==# a:text | let s:ctx_cache.aliases = l:aliases | endif
+    return l:aliases
+  catch
+    return {}
+  endtry
 endfunction
 
 function! s:detect_context() abort
@@ -275,12 +300,12 @@ function! s:detect_context() abort
   let l:col = col('.') - 1
   let l:before = l:line[:l:col]
   
-  " Check alias.column pattern
-  let l:m = matchlist(l:before, '\v([A-Za-z_][A-Za-z0-9_]*)\.([A-Za-z_][A-Za-z0-9_]*)?$')
-  if !empty(l:m)
-    let l:aliases = s:extract_aliases(s:get_context_text())
-    return [s:CTX_COLUMN, strridx(l:before, '.') + 1, get(l:aliases, tolower(l:m[1]), l:m[1])]
-  endif
+   " Check alias.column pattern
+   let l:m = matchlist(l:before, '\v([A-Za-z_][A-Za-z0-9_]*)\.([A-Za-z_][A-Za-z0-9_]*)?$')
+   if !empty(l:m)
+     let l:aliases = s:extract_aliases(s:get_context_text())
+     return [s:CTX_COLUMN, strridx(l:before, '.'), get(l:aliases, tolower(l:m[1]), l:m[1])]
+   endif
   
   " Check table context
   let l:text = s:get_context_text()

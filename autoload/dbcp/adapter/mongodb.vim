@@ -29,27 +29,31 @@ let s:PATTERN_OPERATOR = '\$\w*$'
 " Context Detection
 " =============================================================================
 
-" Get multiline context (look back up to 10 lines, forward up to 5 lines)
-function! s:get_multiline_context(line_num, col) abort
-  let l:start_line = max([1, a:line_num - 10])
-  let l:before_lines = []
-  for l:lnum in range(l:start_line, a:line_num - 1)
-    call add(l:before_lines, getline(l:lnum))
-  endfor
-  
-  let l:current_line = getline(a:line_num)
-  let l:before = join(l:before_lines, ' ') . ' ' . l:current_line[:a:col]
-  let l:after = l:current_line[a:col + 1:]
-  
-  let l:end_line = min([line('$'), a:line_num + 5])
-  let l:after_lines = []
-  for l:lnum in range(a:line_num + 1, l:end_line)
-    call add(l:after_lines, getline(l:lnum))
-  endfor
-  let l:after = l:after . ' ' . join(l:after_lines, ' ')
-  
-  return [l:before, l:after, strlen(join(l:before_lines, ' ')) + 1]
-endfunction
+ " Get multiline context (look back up to 10 lines, forward up to 5 lines)
+ function! s:get_multiline_context(line_num, col) abort
+   let l:start_line = max([1, a:line_num - 10])
+   let l:before_lines = []
+   for l:lnum in range(l:start_line, a:line_num - 1)
+     call add(l:before_lines, getline(l:lnum))
+   endfor
+
+   let l:current_line = getline(a:line_num)
+   let l:before = join(l:before_lines, ' ')
+   if !empty(l:before_lines)
+     let l:before .= ' '
+   endif
+   let l:before .= l:current_line[:a:col]
+   let l:after = l:current_line[a:col + 1:]
+
+   let l:end_line = min([line('$'), a:line_num + 5])
+   let l:after_lines = []
+   for l:lnum in range(a:line_num + 1, l:end_line)
+     call add(l:after_lines, getline(l:lnum))
+   endfor
+   let l:after = l:after . ' ' . join(l:after_lines, ' ')
+
+   return [l:before, l:after, strlen(join(l:before_lines, ' ')) + 1]
+ endfunction
 
 " Detect chain method context: db.collection.method(...).chain_method
 function! s:detect_chain_method(before, offset) abort
@@ -209,26 +213,27 @@ endfunction
 " Saved context structure: [type, start_col, collection, method, param_index]
 let s:saved_ctx = [s:CTX_NONE, -1, '', '', 0]
 
-function! dbcp#adapter#mongodb#complete(findstart, base, db_url) abort
-  if a:findstart
-    " First call: detect context and save it
-    let l:line = line('.')
-    let l:col = col('.')
-    
-    " Try to get from cache first
-    let l:ctx_info = s:get_cached_context(l:line, l:col)
-    if l:ctx_info is v:null
-      " Cache miss, compute context
-      let l:ctx_info = s:get_context()
-      " Cache the result
-      call s:set_cached_context(l:line, l:col, l:ctx_info)
-    endif
-    
-    let s:saved_ctx = l:ctx_info
-    let l:ctx_type = l:ctx_info[0]
-    let l:start_col = l:ctx_info[1]
-    return l:ctx_type == s:CTX_NONE ? -1 : l:start_col
-  endif
+ function! dbcp#adapter#mongodb#complete(findstart, base, db_url) abort
+   if a:findstart
+     " First call: detect context and save it
+     let l:line = line('.')
+     let l:col = col('.')
+
+     " Try to get from cache first
+     let l:ctx_info = s:get_cached_context(l:line, l:col)
+     if l:ctx_info is v:null
+       " Cache miss, compute context
+       let l:ctx_info = s:get_context()
+       " Cache the result
+       call s:set_cached_context(l:line, l:col, l:ctx_info)
+     endif
+
+     let s:saved_ctx = l:ctx_info
+     let l:ctx_type = l:ctx_info[0]
+     let l:start_col = l:ctx_info[1]
+
+     return l:ctx_type == s:CTX_NONE ? -1 : l:start_col
+   endif
 
   " Second call: use saved context
   let l:ctx_type = s:saved_ctx[0]
@@ -382,18 +387,19 @@ function! s:get_collections(db_url) abort
   return l:collections
 endfunction
 
-" Function to clear cache (useful for manual refresh)
-function! dbcp#adapter#mongodb#clear_cache(...) abort
-  if a:0 > 0
-    " Clear specific db_url cache
-    if has_key(s:collections_cache, a:1)
-      call remove(s:collections_cache, a:1)
-    endif
-  else
-    " Clear all cache
-    let s:collections_cache = {}
-  endif
-endfunction
+ " Function to clear cache (useful for manual refresh)
+ function! dbcp#adapter#mongodb#clear_cache(...) abort
+   if a:0 > 0
+     " Clear specific db_url cache
+     if has_key(s:collections_cache, a:1)
+       call remove(s:collections_cache, a:1)
+     endif
+   else
+     " Clear all cache
+     let s:collections_cache = {}
+     let s:context_cache = {}
+   endif
+ endfunction
 
 " =============================================================================
 " Helper Functions

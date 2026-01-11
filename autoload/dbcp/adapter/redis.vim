@@ -126,38 +126,42 @@ function! s:get_context() abort
   let l:last_part = get(l:parts, -1, '')
   let l:last_pos = strridx(l:multiline, l:last_part)
   if l:last_pos == -1 | let l:last_pos = len(l:multiline) - len(l:last_part) | endif
-  
+
   " Subcommand: CLIENT LIST, CONFIG GET, etc.
+  " When user types "CLIENT " (len=1), we should offer subcommand completion
   let l:subcommands = s:load_subcommands()
-  if has_key(l:subcommands, l:cmd) && l:len == 2 && l:last_part =~# '^\w*$'
+  if has_key(l:subcommands, l:cmd) && (l:len == 1 || (l:len == 2 && l:last_part =~# '^\w*$'))
     return [s:CTX_SUBCOMMAND, l:offset + l:last_pos, l:cmd, '']
   endif
-  
+
   " Option: SET key value EX/PX/NX/XX
-  if l:cmd ==# 'SET' && l:len >= 3 && l:last_part =~# '^\w*$'
+  " When user types "SET key value " (len=3), we should offer option completion
+  if l:cmd ==# 'SET' && l:len >= 3 && (l:last_part =~# '^\w*$' || l:last_part ==# '')
     if empty(l:last_part) || toupper(l:last_part) =~# '^\(EX\|PX\|NX\|XX\|GET\|KEEPTTL\|EXAT\|PXAT\)'
       return [s:CTX_OPTION, l:offset + l:last_pos, l:cmd, '']
     endif
   endif
-  
+
   " Hash field: HGET key field, HSET key field value
-  if l:cmd =~# '^H\(GET\|SET\|DEL\)$' && l:len == 3
+  " When user types "HGET key " (len=2), we should offer field completion
+  if l:cmd =~# '^H\(GET\|SET\|DEL\)$' && (l:len == 2 || (l:len == 3 && l:last_part =~# '^\w*$'))
     return [s:CTX_HASH_FIELD, l:offset + l:last_pos, l:cmd, l:parts[1]]
   endif
-  
+
   " Key: command key
+  " When user types "GET " (len=1), we should offer key completion
   let l:key_commands = s:load_key_commands()
-  if index(l:key_commands, l:cmd) >= 0 && l:len == 2 && l:last_part =~# '^\w*$'
+  if index(l:key_commands, l:cmd) >= 0 && (l:len == 1 || (l:len == 2 && l:last_part =~# '^\w*$'))
     return [s:CTX_KEY, l:offset + l:last_pos, l:cmd, '']
   endif
-  
+
   " Command: at start of line
   let l:trimmed = substitute(l:before, '^\s*', '', '')
   if l:trimmed =~# '^\w*$'
     let l:start = match(l:trimmed, '\w')
     return [s:CTX_COMMAND, l:start, '', '']
   endif
-  
+
   return [s:CTX_NONE, -1, '', '']
 endfunction
 

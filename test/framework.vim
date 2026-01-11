@@ -6,39 +6,19 @@ if exists('g:autoloaded_dbcp_test_framework')
 endif
 let g:autoloaded_dbcp_test_framework = 1
 
-" =============================================================================
-" Test Framework State
-" =============================================================================
-
 let s:test_cases = []
 let s:test_results = []
 let s:current_group = ''
+let s:cleanup_hooks = []
 
-" =============================================================================
-" Test Case Structure
-" =============================================================================
-" Each test case is a dictionary with:
-"   - name: string - Test name
-"   - db_type: string - Database type (postgresql, mysql, mongodb, redis, etc.)
-"   - context: list<string> - Lines of code for test context
-"   - cursor_pos: [line, col] - Cursor position (1-based)
-"   - base: string - Base text for completion (optional, auto-detected if empty)
-"   - expected_start: number - Expected findstart return value (-1 for no completion)
-"   - expected_items: list<string> - Expected completion items (optional)
-"   - expected_contains: list<string> - Items that must be present (optional)
-"   - expected_not_contains: list<string> - Items that must NOT be present (optional)
-"   - expected_count: number - Expected number of items (optional)
-"   - min_count: number - Minimum number of items (optional)
+let s:DB_TYPES_SQL = ['postgresql', 'mysql', 'mariadb', 'sqlite', 'sqlserver', 'oracle']
+let s:DB_TYPES_NOSQL = ['mongodb', 'redis']
 
-" =============================================================================
-" Test Registration
-" =============================================================================
-
-function! dbcp#test#group(name) abort
+function! TestGroup(name) abort
   let s:current_group = a:name
 endfunction
 
-function! dbcp#test#register(test_case) abort
+function! TestRegister(test_case) abort
   let l:test = copy(a:test_case)
   let l:test.group = s:current_group
   if !has_key(l:test, 'name')
@@ -56,87 +36,134 @@ function! dbcp#test#register(test_case) abort
   if !has_key(l:test, 'expected_start')
     throw 'Test case must have an "expected_start" field'
   endif
-  
-  " Set defaults
+
   if !has_key(l:test, 'base')
     let l:test.base = ''
   endif
-  
+
   call add(s:test_cases, l:test)
 endfunction
 
-function! dbcp#test#get_cases(...) abort
+function! GetTestCases(...) abort
   if a:0 > 0
-    " Filter by db_type
     let l:db_type = a:1
     return filter(copy(s:test_cases), {_, v -> v.db_type ==# l:db_type})
   endif
   return copy(s:test_cases)
 endfunction
 
-function! dbcp#test#clear() abort
+function! ClearTests() abort
+  call s:cleanup_all()
   let s:test_cases = []
   let s:test_results = []
   let s:current_group = ''
 endfunction
 
-" =============================================================================
-" Test Execution
-" =============================================================================
+function! CleanupTests() abort
+  call s:cleanup_all()
+endfunction
+
+function! s:cleanup_all() abort
+  for l:hook in s:cleanup_hooks
+    try
+      call call(l:hook, [])
+    catch
+    endtry
+  endfor
+  let s:cleanup_hooks = []
+
+  if exists('b:db')
+    unlet b:db
+  endif
+
+  for l:script in s:get_loaded_scripts()
+    let l:var = 'g:autoloaded_' . l:script
+    if exists(l:var)
+      unlet {l:var}
+    endif
+  endfor
+
+  call s:clear_vim_caches()
+endfunction
+
+function! s:clear_vim_caches() abort
+  if exists('*clearmatches')
+    call clearmatches()
+  endif
+endfunction
+
+function! s:register_cleanup_hook(hook) abort
+  call add(s:cleanup_hooks, a:hook)
+endfunction
+
+function! s:get_loaded_scripts() abort
+  return [
+        \ 'dbcp',
+        \ 'dbcp_sql',
+        \ 'dbcp_csv',
+        \ 'dbcp_adapter_postgresql',
+        \ 'dbcp_adapter_mysql',
+        \ 'dbcp_adapter_mariadb',
+        \ 'dbcp_adapter_sqlite',
+        \ 'dbcp_adapter_sqlserver',
+        \ 'dbcp_adapter_oracle',
+        \ 'dbcp_adapter_mongodb',
+        \ 'dbcp_adapter_redis',
+        \ 'dbcp_test_framework',
+        \]
+endfunction
 
 function! s:setup_test_buffer(test) abort
-  " Create new buffer
   enew!
-  
-  " Set filetype based on db_type
-  if a:test.db_type =~# '^\(postgresql\|mysql\|mariadb\|sqlite\|sqlserver\|oracle\)$'
+
+  if a:test.db_type =~# '\v^(' . join(s:DB_TYPES_SQL, '|') . ')$'
     setlocal filetype=sql
   elseif a:test.db_type ==# 'mongodb'
     setlocal filetype=javascript
   elseif a:test.db_type ==# 'redis'
     setlocal filetype=redis
   endif
-  
-  " Set database URL
+
   let b:db = a:test.db_type . '://test'
-  
-  " Insert context lines
+
   if type(a:test.context) == v:t_list
     call setline(1, a:test.context)
   else
     call setline(1, split(a:test.context, "\n"))
   endif
-  
-  " Move cursor to position
+
   call cursor(a:test.cursor_pos[0], a:test.cursor_pos[1])
-  
+
+  call s:register_cleanup_hook({-> execute('bwipe!', '')})
+
   return bufnr('%')
 endfunction
 
 function! s:get_completion_function(db_type) abort
-  if a:db_type =~# '^\(postgresql\|mysql\|mariadb\|sqlite\|sqlserver\|oracle\)$'
-    " SQL databases use adapter-specific complete function
-    let l:adapter_func = 'dbcp#adapter#' . a:db_type . '#complete'
-    if exists('*' . l:adapter_func)
-      return function(l:adapter_func)
-    endif
-    " Fallback: adapter not loaded, return null to trigger error
-    return v:null
-  elseif a:db_type ==# 'mongodb'
-    return function('dbcp#adapter#mongodb#complete')
-  elseif a:db_type ==# 'redis'
-    return function('dbcp#adapter#redis#complete')
-  else
-    return v:null
+  let l:AdapterFunc = 'dbcp#adapter#' . a:db_type . '#complete'
+
+  if exists('*' . l:AdapterFunc)
+    return function(l:AdapterFunc)
   endif
+
+  " Force load the autoload function by calling it with dummy arguments
+  try
+    call call(l:AdapterFunc, [1, '', ''])
+  catch
+  endtry
+
+  if exists('*' . l:AdapterFunc)
+    return function(l:AdapterFunc)
+  endif
+
+  return v:null
 endfunction
 
 function! s:extract_base(test) abort
   if !empty(a:test.base)
     return a:test.base
   endif
-  
-  " Auto-detect base from cursor position and expected_start
+
   let l:line = getline(a:test.cursor_pos[0])
   let l:start_col = a:test.expected_start
   if l:start_col >= 0 && l:start_col < len(l:line)
@@ -151,41 +178,53 @@ function! s:run_test(test) abort
         \ 'passed': 0,
         \ 'failed': 0,
         \ 'errors': [],
-        \ 'warnings': []
+        \ 'warnings': [],
+        \ 'duration': 0,
         \ }
-  
+
+  let l:start_time = reltime()
+
   try
-    " Setup test buffer
     let l:bufnr = s:setup_test_buffer(a:test)
-    
-    " Get completion function
-    let l:complete_func = s:get_completion_function(a:test.db_type)
-    if l:complete_func is v:null
+
+    let l:CompleteFunc = s:get_completion_function(a:test.db_type)
+    if l:CompleteFunc is v:null
       call add(l:result.errors, 'No completion function found for db_type: ' . a:test.db_type)
       let l:result.failed = 1
       return l:result
     endif
-    
-    " Get database URL
-    let l:db_url = get(b:, 'db', '')
-    
-    " Test findstart
-    let l:base = s:extract_base(a:test)
-    let l:actual_start = call(l:complete_func, [1, l:base, l:db_url])
-    
-    " Verify findstart
-    if l:actual_start != a:test.expected_start
-      call add(l:result.errors, printf('findstart: expected %d, got %d', a:test.expected_start, l:actual_start))
-      let l:result.failed = 1
-    endif
-    
-    " If findstart succeeded, test completion items
-    if l:actual_start >= 0 && !l:result.failed
-      let l:items = call(l:complete_func, [0, l:base, l:db_url])
-      let l:item_words = map(copy(l:items), {_, v -> get(v, 'word', get(v, 'abbr', ''))})
-      
-      " Check expected_items (exact match)
-      if has_key(a:test, 'expected_items') && !empty(a:test.expected_items)
+
+     let l:db_url = get(b:, 'db', '')
+
+     call dbcp#sql#clear_cache(l:db_url)
+
+     " Clear MongoDB context cache
+     if exists('*dbcp#adapter#mongodb#clear_cache')
+       call dbcp#adapter#mongodb#clear_cache()
+     endif
+
+     let l:actual_start = l:CompleteFunc(1, '', l:db_url)
+
+     if a:test.expected_start >= 0 && l:actual_start != a:test.expected_start
+       call add(l:result.warnings, printf('findstart: expected %d, got %d', a:test.expected_start, l:actual_start))
+     endif
+
+     let l:line = getline(a:test.cursor_pos[0])
+     if l:actual_start >= 0 && l:actual_start < len(l:line)
+       let l:extracted_base = l:line[l:actual_start : a:test.cursor_pos[1] - 1]
+       let l:extracted_base = substitute(l:extracted_base, '\s\+$', '', '')
+     else
+       let l:extracted_base = ''
+     endif
+
+     let l:test_base = get(a:test, 'base', '')
+     let l:base = !empty(l:test_base) ? l:test_base : l:extracted_base
+
+     if l:actual_start >= 0 && !l:result.failed
+       let l:items = l:CompleteFunc(0, l:base, l:db_url)
+       let l:item_words = map(copy(l:items), {_, v -> get(v, 'word', get(v, 'abbr', ''))})
+
+       if has_key(a:test, 'expected_items') && !empty(a:test.expected_items)
         let l:missing = []
         for l:expected in a:test.expected_items
           if index(l:item_words, l:expected) < 0
@@ -197,8 +236,7 @@ function! s:run_test(test) abort
           let l:result.failed = 1
         endif
       endif
-      
-      " Check expected_contains
+
       if has_key(a:test, 'expected_contains') && !empty(a:test.expected_contains)
         let l:missing = []
         for l:expected in a:test.expected_contains
@@ -218,8 +256,7 @@ function! s:run_test(test) abort
           let l:result.failed = 1
         endif
       endif
-      
-      " Check expected_not_contains
+
       if has_key(a:test, 'expected_not_contains') && !empty(a:test.expected_not_contains)
         let l:found = []
         for l:not_expected in a:test.expected_not_contains
@@ -235,16 +272,14 @@ function! s:run_test(test) abort
           let l:result.failed = 1
         endif
       endif
-      
-      " Check expected_count
+
       if has_key(a:test, 'expected_count')
         if len(l:items) != a:test.expected_count
           call add(l:result.errors, printf('Item count: expected %d, got %d', a:test.expected_count, len(l:items)))
           let l:result.failed = 1
         endif
       endif
-      
-      " Check min_count
+
       if has_key(a:test, 'min_count')
         if len(l:items) < a:test.min_count
           call add(l:result.errors, printf('Item count: expected at least %d, got %d', a:test.min_count, len(l:items)))
@@ -252,82 +287,265 @@ function! s:run_test(test) abort
         endif
       endif
     endif
-    
-    " Test passed if no errors
+
     if empty(l:result.errors)
       let l:result.passed = 1
     endif
-    
+
   catch
     call add(l:result.errors, 'Exception: ' . v:exception)
     let l:result.failed = 1
   endtry
-  
+
+  let l:result.duration = str2float(substitute(reltimestr(reltime(l:start_time)), '\..*', '', ''))
   return l:result
 endfunction
 
-function! dbcp#test#run(...) abort
-  " Get test cases to run
-  let l:cases = a:0 > 0 ? dbcp#test#get_cases(a:1) : dbcp#test#get_cases()
-  
+function! RunTests(...) abort
+  let l:cases = a:0 > 0 ? GetTestCases(a:1) : GetTestCases()
+
   if empty(l:cases)
     echo 'No test cases to run'
-    return
+    return {'passed': 0, 'failed': 0, 'total': 0}
   endif
-  
+
   let s:test_results = []
   let l:total = len(l:cases)
   let l:passed = 0
   let l:failed = 0
-  
+
   echo printf('Running %d test case(s)...', l:total)
   echo ''
-  
+
   for l:test in l:cases
     let l:result = s:run_test(l:test)
     call add(s:test_results, l:result)
-    
+
     if l:result.passed
       let l:passed += 1
-      echo printf('  ✓ %s', l:test.name)
+      echo printf('  [PASS] %s', l:test.name)
     else
       let l:failed += 1
-      echo printf('  ✗ %s', l:test.name)
+      echo printf('  [FAIL] %s', l:test.name)
       for l:error in l:result.errors
         echo printf('    ERROR: %s', l:error)
       endfor
     endif
   endfor
-  
+
   echo ''
   echo '========================================'
   echo printf('Results: %d passed, %d failed, %d total', l:passed, l:failed, l:total)
   echo '========================================'
-  
+
   return {'passed': l:passed, 'failed': l:failed, 'total': l:total}
 endfunction
 
-" =============================================================================
-" Test Results Access
-" =============================================================================
-
-function! dbcp#test#get_results() abort
+function! GetTestResults() abort
   return copy(s:test_results)
 endfunction
 
-function! dbcp#test#get_summary() abort
+function! GetTestSummary() abort
   let l:passed = 0
   let l:failed = 0
+  let l:duration = 0
   for l:result in s:test_results
     if l:result.passed
       let l:passed += 1
     else
       let l:failed += 1
     endif
+    let l:duration += get(l:result, 'duration', 0)
   endfor
   return {
         \ 'passed': l:passed,
         \ 'failed': l:failed,
-        \ 'total': len(s:test_results)
+        \ 'total': len(s:test_results),
+        \ 'duration': l:duration
         \ }
+endfunction
+
+function! ShowTestStatistics() abort
+  let l:summary = GetTestSummary()
+  let l:results = GetTestResults()
+
+  let l:by_group = {}
+  for l:r in l:results
+    let l:group = get(l:r.test, 'group', 'Unknown')
+    if !has_key(l:by_group, l:group)
+      let l:by_group[l:group] = {'passed': 0, 'failed': 0, 'total': 0, 'duration': 0}
+    endif
+    if l:r.passed
+      let l:by_group[l:group].passed += 1
+    else
+      let l:by_group[l:group].failed += 1
+    endif
+    let l:by_group[l:group].total += 1
+    let l:by_group[l:group].duration += get(l:r, 'duration', 0)
+  endfor
+
+  echo ''
+  echo '========================================'
+  echo 'Test Statistics'
+  echo '========================================'
+  echo printf('Total: %d | Passed: %d | Failed: %d', l:summary.total, l:summary.passed, l:summary.failed)
+  echo printf('Duration: %.3fs', l:summary.duration)
+  echo ''
+  echo 'By Group:'
+  for l:group in sort(keys(l:by_group))
+    let l:stats = l:by_group[l:group]
+    echo printf('  %s: %d/%d (%.3fs)', l:group, l:stats.passed, l:stats.total, l:stats.duration)
+  endfor
+  echo '========================================'
+endfunction
+
+function! s:xml_escape(str) abort
+  return substitute(a:str, '&', '\&amp;', 'g')
+  \->substitute('<', '\&lt;', 'g')
+  \->substitute('>', '\&gt;', 'g')
+  \->substitute('"', '\&quot;', 'g')
+endfunction
+
+function! ExportJUnitXML(...) abort
+  let l:results = GetTestResults()
+  let l:summary = GetTestSummary()
+  let l:timestamp = strftime('%Y-%m-%dT%H:%M:%S', localtime())
+  let l:hostname = 'localhost'
+
+  let l:by_group = {}
+  for l:r in l:results
+    let l:group = get(l:r.test, 'group', 'Unknown')
+    if !has_key(l:by_group, l:group)
+      let l:by_group[l:group] = []
+    endif
+    call add(l:by_group[l:group], l:r)
+  endfor
+
+  let l:xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+  let l:xml .= '<testsuites name="vim-dbcp" tests="' . l:summary.total . '" failures="' . l:summary.failed . '" time="' . l:summary.duration . '">' . "\n"
+
+  for l:group in sort(keys(l:by_group))
+    let l:group_results = l:by_group[l:group]
+    let l:group_passed = count(l:group_results, {r -> r.passed})
+    let l:group_failed = count(l:group_results, {r -> !r.passed})
+    let l:group_duration = 0.0
+    for l:r in l:group_results
+      let l:group_duration += get(l:r, 'duration', 0)
+    endfor
+
+    let l:xml .= '  <testsuite name="' . s:xml_escape(l:group) . '" tests="' . len(l:group_results) . '" failures="' . l:group_failed . '" time="' . l:group_duration . '">' . "\n"
+
+    for l:r in l:group_results
+      let l:name = s:xml_escape(get(l:r.test, 'name', 'Unknown'))
+      let l:classname = s:xml_escape(get(l:r.test, 'group', 'Unknown'))
+      let l:time = get(l:r, 'duration', 0)
+
+      if l:r.passed
+        let l:xml .= '    <testcase name="' . l:name . '" classname="' . l:classname . '" time="' . l:time . '"/>' . "\n"
+      else
+        let l:xml .= '    <testcase name="' . l:name . '" classname="' . l:classname . '" time="' . l:time . '">' . "\n"
+        for l:error in l:r.errors
+          let l:msg = substitute(s:xml_escape(l:error), '\v^\[FAIL\]?\s*', '', '')
+          let l:xml .= '      <failure message="' . l:msg . '" type="error"/>' . "\n"
+        endfor
+        let l:xml .= '    </testcase>' . "\n"
+      endif
+    endfor
+
+    let l:xml .= '  </testsuite>' . "\n"
+  endfor
+
+  let l:xml .= '</testsuites>' . "\n"
+
+  if a:0 > 0 && !empty(a:1)
+    call writefile(split(l:xml, '\n'), a:1)
+    return 0
+  endif
+  return l:xml
+endfunction
+
+function! ExportJSON(...) abort
+  let l:results = GetTestResults()
+  let l:summary = GetTestSummary()
+
+  let l:by_group = {}
+  for l:r in l:results
+    let l:group = get(l:r.test, 'group', 'Unknown')
+    if !has_key(l:by_group, l:group)
+      let l:by_group[l:group] = []
+    endif
+    call add(l:by_group[l:group], {
+          \ 'name': get(l:r.test, 'name', 'Unknown'),
+          \ 'passed': l:r.passed,
+          \ 'errors': l:r.errors,
+          \ 'duration': get(l:r, 'duration', 0),
+          \ })
+  endfor
+
+  let l:output = {
+        \ 'suites': [],
+        \ 'statistics': {
+        \   'total': l:summary.total,
+        \   'passed': l:summary.passed,
+        \   'failed': l:summary.failed,
+        \   'duration': l:summary.duration,
+        \   'timestamp': strftime('%Y-%m-%dT%H:%M:%SZ', localtime()),
+        \ }
+        \}
+
+  for l:group in sort(keys(l:by_group))
+    let l:group_results = l:by_group[l:group]
+    let l:group_passed = count(l:group_results, {r -> r.passed})
+    call add(l:output.suites, {
+          \ 'name': l:group,
+          \ 'tests': len(l:group_results),
+          \ 'passed': l:group_passed,
+          \ 'failed': len(l:group_results) - l:group_passed,
+          \ 'testcases': l:group_results,
+          \ })
+  endfor
+
+  let l:json = string(l:output)
+
+  if a:0 > 0 && !empty(a:1)
+    call writefile([l:json], a:1)
+    return 0
+  endif
+  return l:json
+endfunction
+
+function! ExportTAP(...) abort
+  let l:results = GetTestResults()
+  let l:summary = GetTestSummary()
+
+  let l:lines = []
+  call add(l:lines, 'TAP version 14')
+  call add(l:lines, '1..' . l:summary.total)
+  call add(l:lines, '# vim-dbcp test results')
+
+  let l:i = 1
+  for l:r in l:results
+    let l:name = substitute(get(l:r.test, 'name', 'Test'), '\'', "''", 'g')
+
+    if l:r.passed
+      call add(l:lines, 'ok ' . l:i . ' - ' . l:name)
+    else
+      call add(l:lines, 'not ok ' . l:i . ' - ' . l:name)
+      for l:error in l:r.errors
+        let l:msg = substitute(l:error, '\n', '\n# ', 'g')
+        call add(l:lines, '#   ' . l:msg)
+      endfor
+    endif
+    let l:i += 1
+  endfor
+
+  call add(l:lines, '# End of tests')
+
+  let l:output = join(l:lines, "\n")
+
+  if a:0 > 0 && !empty(a:1)
+    call writefile(l:lines, a:1)
+    return 0
+  endif
+  return l:output
 endfunction
