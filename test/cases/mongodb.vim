@@ -1,7 +1,7 @@
 " MongoDB Completion Test Cases
 
 " Load framework
-runtime test/framework.vim
+source test/framework.vim
 
 " =============================================================================
 " Test Group: DB Method Completion
@@ -310,3 +310,219 @@ call TestRegister({
       \ 'cursor_pos': [1, 35],
       \ 'expected_start': -1
       \ })
+
+" =============================================================================
+" Test Group: Error Handling (High Priority)
+" =============================================================================
+
+call TestGroup('MongoDB - Error Handling')
+
+call TestRegister({
+      \ 'name': 'Invalid collection no completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.nonexistent_12345.'],
+      \ 'cursor_pos': [1, 25],
+      \ 'expected_start': 25,
+      \ 'min_count': 0
+      \ })
+
+call TestRegister({
+      \ 'name': 'Method with args no chain completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.find({status: "active"}).'],
+      \ 'cursor_pos': [1, 36],
+      \ 'expected_start': 36,
+      \ 'min_count': 1,
+      \ 'expected_contains': ['limit', 'skip']
+      \ })
+
+call TestRegister({
+      \ 'name': 'Array context no completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.find([{status: "active"}].'],
+      \ 'cursor_pos': [1, 37],
+      \ 'expected_start': -1
+      \ })
+
+call TestRegister({
+      \ 'name': 'String literal context',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.find({name: "db."})'],
+      \ 'cursor_pos': [1, 29],
+      \ 'expected_start': -1
+      \ })
+
+" =============================================================================
+" Test Group: Edge Cases (High Priority)
+" =============================================================================
+
+call TestGroup('MongoDB - Edge Cases')
+
+call TestRegister({
+      \ 'name': 'Empty prefix no empty completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.'],
+      \ 'cursor_pos': [1, 4],
+      \ 'expected_start': 3,
+      \ 'min_count': 1
+      \ })
+
+call TestRegister({
+      \ 'name': 'Nested chain methods',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.find().skip().limit().'],
+      \ 'cursor_pos': [1, 34],
+      \ 'expected_start': 34,
+      \ 'min_count': 1
+      \ })
+
+call TestRegister({
+      \ 'name': 'Multiple filter conditions',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.find({status: "active", age: {$gt: }'],
+      \ 'cursor_pos': [1, 45],
+      \ 'expected_start': 44,
+      \ 'min_count': 1,
+      \ 'expected_contains': ['$gt', '$gte']
+      \ })
+
+call TestRegister({
+      \ 'name': 'Regex context',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.find({name: /^db./'],
+      \ 'cursor_pos': [1, 28],
+      \ 'expected_start': -1
+      \ })
+
+" =============================================================================
+" Test Group: Aggregation Advanced (Medium Priority)
+" =============================================================================
+
+call TestGroup('MongoDB - Aggregation Advanced')
+
+call TestRegister({
+      \ 'name': '$lookup stage completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.aggregate([{ $lookup: { from: }'],
+      \ 'cursor_pos': [1, 40],
+      \ 'expected_start': 38,
+      \ 'expected_contains': ['orders', 'products']
+      \ })
+
+call TestRegister({
+      \ 'name': '$unwind stage completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.aggregate([{ $unwind: }'],
+      \ 'cursor_pos': [1, 33],
+      \ 'expected_start': 31,
+      \ 'expected_contains': ['$tags']
+      \ })
+
+call TestRegister({
+      \ 'name': '$project stage completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.aggregate([{ $project: { name: }'],
+      \ 'cursor_pos': [1, 38],
+      \ 'expected_start': 36,
+      \ 'min_count': 1
+      \ })
+
+call TestRegister({
+      \ 'name': '$match stage column completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.aggregate([{ $match: { }'],
+      \ 'cursor_pos': [1, 35],
+      \ 'expected_start': 34,
+      \ 'expected_contains': ['name', 'status', 'email']
+      \ })
+
+call TestRegister({
+      \ 'name': '$group stage completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.aggregate([{ $group: { _id: }'],
+      \ 'cursor_pos': [1, 37],
+      \ 'expected_start': 35,
+      \ 'expected_contains': ['$status', '$name']
+      \ })
+
+call TestRegister({
+      \ 'name': '$sort stage column completion',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.aggregate([{ $sort: { }'],
+      \ 'cursor_pos': [1, 33],
+      \ 'expected_start': 31,
+      \ 'expected_contains': ['name', 'created_at', 'id']
+      \ })
+
+" =============================================================================
+" Test Group: Find Method Variants (Medium Priority)
+" =============================================================================
+
+call TestGroup('MongoDB - Find Variants')
+
+call TestRegister({
+      \ 'name': 'findOneAndUpdate chain',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.findOneAndUpdate().'],
+      \ 'cursor_pos': [1, 28],
+      \ 'expected_start': 28,
+      \ 'min_count': 1
+      \ })
+
+call TestRegister({
+      \ 'name': 'findOneAndDelete chain',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.findOneAndDelete().'],
+      \ 'cursor_pos': [1, 28],
+      \ 'expected_start': 28,
+      \ 'min_count': 1
+      \ })
+
+call TestRegister({
+      \ 'name': 'findById method',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.findById('],
+      \ 'cursor_pos': [1, 19],
+      \ 'expected_start': -1
+      \ })
+
+call TestRegister({
+      \ 'name': 'replaceOne method',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.replaceOne('],
+      \ 'cursor_pos': [1, 20],
+      \ 'expected_start': -1
+      \ })
+
+" =============================================================================
+" Test Group: Bulk Operations (Low Priority)
+" =============================================================================
+
+call TestGroup('MongoDB - Bulk Operations')
+
+call TestRegister({
+      \ 'name': 'bulkWrite method',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.bulkWrite('],
+      \ 'cursor_pos': [1, 19],
+      \ 'expected_start': -1
+      \ })
+
+call TestRegister({
+      \ 'name': 'initializeUnorderedBulkOp',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.initializeUnorderedBulkOp().'],
+      \ 'cursor_pos': [1, 40],
+      \ 'expected_start': 40,
+      \ 'min_count': 1
+      \ })
+
+call TestRegister({
+      \ 'name': 'initializeOrderedBulkOp',
+      \ 'db_type': 'mongodb',
+      \ 'context': ['db.users.initializeOrderedBulkOp().'],
+      \ 'cursor_pos': [1, 39],
+      \ 'expected_start': 39,
+      \ 'min_count': 1
+      \ })
+

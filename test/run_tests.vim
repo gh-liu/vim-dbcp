@@ -211,6 +211,8 @@ call s:setup_runtimepath()
 call s:reload_scripts()
 call s:load_framework()
 
+set nomore
+
 if !s:options.quiet
   echo 'Loading test cases...'
   echo ''
